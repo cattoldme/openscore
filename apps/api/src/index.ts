@@ -3,12 +3,18 @@ import { cors } from "hono/cors";
 import { Hono } from "hono";
 import { streamSSE } from "hono/streaming";
 import { loadServerEnv } from "@openscore/config";
+import { createInMemorySportsRepository, createPrismaClient, createPrismaSportsRepository } from "@openscore/db";
 import { createSyncRunner } from "./jobs/sync-jobs";
 import { createSportsService } from "./services/sports-service";
 
 const env = loadServerEnv();
 const app = new Hono();
+const repository =
+  env.SPORTS_REPOSITORY === "postgres"
+    ? createPrismaSportsRepository(createPrismaClient(env.DATABASE_URL))
+    : createInMemorySportsRepository();
 const sports = createSportsService(env.SPORTS_PROVIDER, {
+  repository,
   footballData: {
     apiKey: env.FOOTBALL_DATA_API_KEY,
     baseUrl: env.FOOTBALL_DATA_BASE_URL,
@@ -42,11 +48,11 @@ app.get("/competitions", async (c) =>
   c.json({ data: await sports.listCompetitions(), meta: buildMeta() })
 );
 
-app.get("/sync/status", (c) =>
+app.get("/sync/status", async (c) =>
   c.json({
     data: {
       sync: syncRunner.getSnapshot(),
-      repository: sports.getRepositorySnapshot(),
+      repository: await sports.getRepositorySnapshot(),
       cache: sports.getCacheSnapshot()
     },
     meta: buildMeta()

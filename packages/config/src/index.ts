@@ -6,6 +6,7 @@ const serverEnvSchema = z.object({
   API_BASE_URL: z.url().default("http://localhost:4000"),
   DATABASE_URL: z.string().min(1).default("postgresql://openscore:openscore@localhost:5432/openscore?schema=public"),
   REDIS_URL: z.string().min(1).default("redis://localhost:6379"),
+  SPORTS_REPOSITORY: z.enum(["memory", "postgres"]).default("memory"),
   SPORTS_PROVIDER: z.enum(["mock", "football_data", "thesportsdb", "openligadb", "openfootball"]).default("mock"),
   FOOTBALL_DATA_API_KEY: z.string().optional().default(""),
   FOOTBALL_DATA_BASE_URL: z.url().default("https://api.football-data.org/v4"),

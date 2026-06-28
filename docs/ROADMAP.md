@@ -31,6 +31,7 @@
 - [x] Add first football data provider
 - [x] Add PostgreSQL schema
 - [x] Add repository abstraction
+- [x] Add PostgreSQL repository implementation
 - [x] Add sync jobs
 - [x] Add cache strategy
 

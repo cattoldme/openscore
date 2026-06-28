@@ -82,7 +82,6 @@ Commercial data sources can be added later, but the MVP should prove the experie
 │   ├── db
 │   ├── domain
 │   └── providers
-├── docker-compose.yml
 ├── README.md
 ├── LICENSE
 ├── docs
@@ -129,6 +128,7 @@ pnpm build
 Provider configuration:
 
 ```bash
+SPORTS_REPOSITORY=memory
 SPORTS_PROVIDER=mock
 
 # Optional football-data.org provider
@@ -136,6 +136,9 @@ SPORTS_PROVIDER=football_data
 FOOTBALL_DATA_API_KEY=your-api-key
 FOOTBALL_DATA_BASE_URL=https://api.football-data.org/v4
 FOOTBALL_DATA_COMPETITIONS=PL
+
+# Optional PostgreSQL repository
+SPORTS_REPOSITORY=postgres
 ```
 
 Database helpers:
@@ -143,6 +146,7 @@ Database helpers:
 ```bash
 pnpm db:validate
 pnpm db:generate
+pnpm db:push
 ```
 
 Self-host with Docker Compose:
@@ -162,7 +166,7 @@ docker compose up --build
 
 ## Status
 
-OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, repository abstraction, football-data provider adapter, in-memory API cache, manual sync status endpoints, and a grounded natural-language query MVP. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, memory/PostgreSQL repository implementations, football-data provider adapter, in-memory API cache, manual sync status endpoints, and a grounded natural-language query MVP. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
 
 See:
 

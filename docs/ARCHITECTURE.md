@@ -150,6 +150,7 @@ flowchart LR
 
 - `SportsRepository` 接口
 - `createInMemorySportsRepository()`，用于 Docker/PostgreSQL 尚未准备好时的本地同步和查询验证
+- `createPrismaSportsRepository()`，通过 Prisma 7 driver adapter 接入 PostgreSQL
 
 ### 4.5 packages/providers
 
@@ -467,7 +468,7 @@ MVP 至少记录：
 当前 API 已实现：
 
 - mock provider 和 football-data provider 选择
-- repository 读写抽象和内存 repository
+- repository 读写抽象、内存 repository 和 PostgreSQL repository
 - 内存 TTL cache
 - 手动同步任务状态：`GET /sync/status`、`POST /sync/run`
 - 确定性 AI 查询 MVP：`POST /ai/query`

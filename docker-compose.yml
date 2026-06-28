@@ -11,6 +11,7 @@ services:
       API_BASE_URL: ${API_BASE_URL:-http://localhost:4000}
       DATABASE_URL: ${DATABASE_URL:-postgresql://openscore:openscore@postgres:5432/openscore?schema=public}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      SPORTS_REPOSITORY: ${SPORTS_REPOSITORY:-memory}
       SPORTS_PROVIDER: ${SPORTS_PROVIDER:-mock}
       FOOTBALL_DATA_API_KEY: ${FOOTBALL_DATA_API_KEY:-}
       FOOTBALL_DATA_BASE_URL: ${FOOTBALL_DATA_BASE_URL:-https://api.football-data.org/v4}

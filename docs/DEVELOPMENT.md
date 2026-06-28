@@ -93,6 +93,12 @@ pnpm db:validate
 pnpm db:generate
 ```
 
+把 schema 推送到开发数据库：
+
+```powershell
+pnpm db:push
+```
+
 当前已验证：
 
 - `pnpm install`
@@ -163,7 +169,7 @@ football-data provider 当前已标准化：
 
 - 默认仍使用 mock provider；football-data 适配器已实现，但本机没有真实 API key，尚未做线上数据 smoke test。
 - Docker 未准备好，当前机器还不能实测 `docker compose up --build`。
-- 当前 repository 默认是内存实现，服务重启后同步数据会丢失；PostgreSQL repository 等 Docker/数据库环境准备后接入。
+- 当前 repository 默认是内存实现，服务重启后同步数据会丢失；PostgreSQL repository 已实现，但当前机器没有 PostgreSQL/Docker，尚未做真实数据库 smoke test。
 - AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema 已验证，但未执行真实数据库 migration，因为当前机器 `docker` 命令不可用。
@@ -171,9 +177,9 @@ football-data provider 当前已标准化：
 ## 9. 下一步建议
 
 1. 安装 Docker Desktop 并启动 PostgreSQL/Redis
-2. 执行第一版 migration
+2. 执行 `pnpm db:push`
 3. 用真实 `FOOTBALL_DATA_API_KEY` 做 provider smoke test
-4. 实现 PostgreSQL repository
+4. 将默认部署切到 `SPORTS_REPOSITORY=postgres`
 5. 加 Playwright smoke test
 
 部署说明见 [Deployment](DEPLOYMENT.md)。

@@ -27,7 +27,7 @@ export type SportsRepository = {
   listStandings(competitionId: string): Promise<StandingRow[]>;
   findTeam(id: string): Promise<Team | null>;
   listTeamForm(teamId: string): Promise<Array<"W" | "D" | "L">>;
-  snapshot(): RepositorySnapshot;
+  snapshot(): Promise<RepositorySnapshot>;
 };
 
 export function createInMemorySportsRepository(): SportsRepository {
@@ -104,7 +104,7 @@ export function createInMemorySportsRepository(): SportsRepository {
 
       return [];
     },
-    snapshot() {
+    async snapshot() {
       return {
         sports: sports.size,
         competitions: competitions.size,

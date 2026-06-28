@@ -12,7 +12,8 @@
     "lint": "pnpm -r lint",
     "db:format": "pnpm --filter @openscore/db db:format",
     "db:validate": "pnpm --filter @openscore/db db:validate",
-    "db:generate": "pnpm --filter @openscore/db db:generate"
+    "db:generate": "pnpm --filter @openscore/db db:generate",
+    "db:push": "pnpm --filter @openscore/db db:push"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

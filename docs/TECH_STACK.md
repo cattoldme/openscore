@@ -127,7 +127,7 @@ API 不把外部 provider 的原始结构直接暴露给前端。
 
 数据库访问必须通过 repository/service 层，避免页面或 route handler 直接散落 Prisma 查询。
 
-当前已实现 `SportsRepository` 接口和内存 repository，用来在 Docker/PostgreSQL 未准备好时验证同步写入、API 查询和缓存行为。后续 PostgreSQL repository 需要实现同一接口。
+当前已实现 `SportsRepository` 接口、内存 repository 和 PostgreSQL repository。默认运行仍使用内存实现；设置 `SPORTS_REPOSITORY=postgres` 后 API 会通过 Prisma 7 PostgreSQL driver adapter 访问数据库。
 
 当前采用 Prisma 7：
 

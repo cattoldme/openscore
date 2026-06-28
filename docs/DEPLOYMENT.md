@@ -11,7 +11,7 @@ OpenScore MVP 先支持 Docker Compose 自建部署：
 - `postgres`：PostgreSQL 16，默认端口 `5432`
 - `redis`：Redis 7，默认端口 `6379`
 
-当前 API 仍默认使用内存 repository 和内存 cache。PostgreSQL/Redis 已进入部署拓扑，用于后续持久化 repository、分布式缓存和同步锁接入。
+当前 API 默认使用内存 repository 和内存 cache。PostgreSQL repository 已实现，可通过 `SPORTS_REPOSITORY=postgres` 开启；Redis 已进入部署拓扑，用于后续分布式缓存和同步锁接入。
 
 ## 2. 前置要求
 
@@ -38,8 +38,20 @@ Copy-Item .env.example .env
 本地 mock 模式可以直接使用默认值：
 
 ```env
+SPORTS_REPOSITORY=memory
 SPORTS_PROVIDER=mock
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
+```
+
+使用 PostgreSQL repository 时，先推送 schema，然后切换 repository：
+
+```powershell
+pnpm db:push
+```
+
+```env
+SPORTS_REPOSITORY=postgres
+DATABASE_URL=postgresql://openscore:openscore@localhost:5432/openscore?schema=public
 ```
 
 接入 football-data.org 时填写：
@@ -124,7 +136,8 @@ docker compose down -v
 ## 7. 当前限制
 
 - 本机复检时 `docker` 命令不可用，因此本文的 Docker Compose 运行还未在当前机器实测。
-- PostgreSQL schema 已验证，但 API 还没有切到 PostgreSQL repository；服务重启后内存 repository 数据会丢失。
+- PostgreSQL schema 和 repository 代码已验证到类型/构建层，但当前机器没有 PostgreSQL/Docker，尚未执行 `pnpm db:push` 和真实数据库 smoke test。
+- 默认 `SPORTS_REPOSITORY=memory` 时，服务重启后内存 repository 数据会丢失。
 - Redis 已在拓扑中，但 API cache 仍是内存 TTL cache。
 - football-data.org 真实数据需要 `FOOTBALL_DATA_API_KEY`。
 - AI 查询当前是确定性 grounded MVP，还没有接真实 LLM provider。
@@ -133,8 +146,7 @@ docker compose down -v
 
 下一步：
 
-1. 实现 PostgreSQL repository
-2. 添加 migration/seed 执行流程
-3. 把 Redis 接入 cache 和 sync lock
-4. 拆分生产 Dockerfile，减小镜像体积
-5. 添加 CI 构建和镜像发布
+1. 添加 migration/seed 执行流程
+2. 把 Redis 接入 cache 和 sync lock
+3. 拆分生产 Dockerfile，减小镜像体积
+4. 添加 CI 构建和镜像发布

@@ -86,6 +86,7 @@ Copy-Item .env.example .env
 | `NEXT_PUBLIC_API_BASE_URL` | 是 | 浏览器端调用 API 的公开地址 |
 | `DATABASE_URL` | 是 | PostgreSQL 连接串 |
 | `REDIS_URL` | 是 | Redis 连接串 |
+| `SPORTS_REPOSITORY` | 是 | 默认 `memory`，可切换为 `postgres` |
 | `SPORTS_PROVIDER` | 是 | MVP 可先用 `mock` |
 | `FOOTBALL_DATA_API_KEY` | 否 | 接入 football-data.org 时填写 |
 | `FOOTBALL_DATA_BASE_URL` | 是 | 默认 `https://api.football-data.org/v4` |
@@ -130,6 +131,7 @@ Copy-Item .env.example .env
 - Web/API 基础工程
 - mock provider
 - football-data provider 适配器
+- 内存 repository 和 PostgreSQL repository
 - API 内存缓存和手动同步状态接口
 - 第一版 `Dockerfile`
 - Web/API/PostgreSQL/Redis `docker-compose.yml`
