@@ -3,11 +3,19 @@ import { cors } from "hono/cors";
 import { Hono } from "hono";
 import { streamSSE } from "hono/streaming";
 import { loadServerEnv } from "@openscore/config";
+import { createSyncRunner } from "./jobs/sync-jobs";
 import { createSportsService } from "./services/sports-service";
 
 const env = loadServerEnv();
 const app = new Hono();
-const sports = createSportsService(env.SPORTS_PROVIDER);
+const sports = createSportsService(env.SPORTS_PROVIDER, {
+  footballData: {
+    apiKey: env.FOOTBALL_DATA_API_KEY,
+    baseUrl: env.FOOTBALL_DATA_BASE_URL,
+    competitionCodes: parseList(env.FOOTBALL_DATA_COMPETITIONS)
+  }
+});
+const syncRunner = createSyncRunner(sports.provider);
 
 app.use(
   "*",
@@ -33,6 +41,25 @@ app.get("/sports", async (c) => c.json({ data: await sports.listSports(), meta: 
 app.get("/competitions", async (c) =>
   c.json({ data: await sports.listCompetitions(), meta: buildMeta() })
 );
+
+app.get("/sync/status", (c) =>
+  c.json({
+    data: {
+      sync: syncRunner.getSnapshot(),
+      cache: sports.getCacheSnapshot()
+    },
+    meta: buildMeta()
+  })
+);
+
+app.post("/sync/run", async (c) => {
+  sports.clearCache();
+
+  return c.json({
+    data: await syncRunner.runNow(),
+    meta: buildMeta()
+  });
+});
 
 app.get("/competitions/:id/standings", async (c) => {
   const competition = await sports.getCompetition(c.req.param("id"));
@@ -179,4 +206,11 @@ function notFound(code: string, message: string) {
       message
     }
   };
+}
+
+function parseList(value: string): string[] {
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }

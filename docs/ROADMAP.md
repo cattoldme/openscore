@@ -28,10 +28,10 @@
 
 - [x] Define normalized domain models
 - [x] Implement provider adapter interface
-- [ ] Add first football data provider
+- [x] Add first football data provider
 - [x] Add PostgreSQL schema
-- [ ] Add sync jobs
-- [ ] Add cache strategy
+- [x] Add sync jobs
+- [x] Add cache strategy
 
 ## Phase 3 - MVP
 

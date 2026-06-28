@@ -8,6 +8,8 @@ const serverEnvSchema = z.object({
   REDIS_URL: z.string().min(1).default("redis://localhost:6379"),
   SPORTS_PROVIDER: z.enum(["mock", "football_data", "thesportsdb", "openligadb", "openfootball"]).default("mock"),
   FOOTBALL_DATA_API_KEY: z.string().optional().default(""),
+  FOOTBALL_DATA_BASE_URL: z.url().default("https://api.football-data.org/v4"),
+  FOOTBALL_DATA_COMPETITIONS: z.string().default("PL"),
   THESPORTSDB_API_KEY: z.string().optional().default(""),
   OPENLIGADB_BASE_URL: z.url().default("https://www.openligadb.de/api"),
   AI_PROVIDER: z.enum(["disabled", "openai"]).default("disabled"),
@@ -23,4 +25,3 @@ export type ServerEnv = z.infer<typeof serverEnvSchema>;
 export function loadServerEnv(source: NodeJS.ProcessEnv = process.env): ServerEnv {
   return serverEnvSchema.parse(source);
 }
-

@@ -1,6 +1,6 @@
 # OpenScore 开发说明
 
-更新时间：2026-06-28
+更新时间：2026-06-29
 
 ## 1. 当前工程状态
 
@@ -11,10 +11,10 @@
 - Hono API：`apps/api`
 - 共享领域模型：`packages/domain`
 - 环境变量校验：`packages/config`
-- mock 数据源：`packages/providers`
+- mock 数据源和 football-data provider 适配器：`packages/providers`
 - Prisma schema：`packages/db/prisma/schema.prisma`
 - Docker Compose：`docker-compose.yml`
-- 今日比赛、积分榜、球队详情、球队状态和本地收藏的最小产品链路
+- 今日比赛、积分榜、球队详情、球队状态、本地收藏、缓存和手动同步状态的最小产品链路
 
 ## 2. 安装依赖
 
@@ -108,6 +108,8 @@ Invoke-RestMethod http://localhost:4000/health
 Invoke-RestMethod http://localhost:4000/matches/today
 Invoke-RestMethod http://localhost:4000/competitions/premier-league/standings
 Invoke-RestMethod http://localhost:4000/teams/arsenal
+Invoke-RestMethod http://localhost:4000/sync/status
+Invoke-RestMethod -Method Post http://localhost:4000/sync/run
 ```
 
 Web 快速检查：
@@ -129,18 +131,41 @@ start byte index ... is not a char boundary
 
 已在 `apps/web/next.config.ts` 中显式设置 `turbopack.root` 为仓库根目录，避免该问题。
 
-## 7. 当前限制
+## 7. 数据源切换
 
-- 目前使用 mock provider，还没有接真实体育数据 API。
+默认使用 mock provider：
+
+```powershell
+$env:SPORTS_PROVIDER='mock'
+```
+
+切换到 football-data provider：
+
+```powershell
+$env:SPORTS_PROVIDER='football_data'
+$env:FOOTBALL_DATA_API_KEY='<your-api-key>'
+$env:FOOTBALL_DATA_COMPETITIONS='PL'
+```
+
+football-data provider 当前已标准化：
+
+- 比赛列表：`GET /matches/today`
+- 进行中比赛：`GET /live/matches/events`
+- 积分榜：`GET /competitions/premier-league/standings`
+- 球队详情：`GET /teams/fd-<football-data-team-id>`
+
+## 8. 当前限制
+
+- 默认仍使用 mock provider；football-data 适配器已实现，但本机没有真实 API key，尚未做线上数据 smoke test。
 - Docker 未准备好，PostgreSQL/Redis 还没有本地容器环境。
 - AI 查询入口在 API 中已有占位实现，但尚未接真实模型。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema 已验证，但未执行真实数据库 migration，因为当前机器 `docker` 命令不可用。
 
-## 8. 下一步建议
+## 9. 下一步建议
 
 1. 安装 Docker Desktop 并启动 PostgreSQL/Redis
 2. 执行第一版 migration
-3. 把 mock 数据落到 repository 接口后面
-4. 接入第一个真实 provider
+3. 用真实 `FOOTBALL_DATA_API_KEY` 做 provider smoke test
+4. 把同步结果落到 repository 接口后面
 5. 加 Playwright smoke test

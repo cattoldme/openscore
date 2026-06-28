@@ -1,6 +1,6 @@
 # OpenScore 架构设计
 
-更新时间：2026-06-28
+更新时间：2026-06-29
 
 ## 1. 架构目标
 
@@ -162,6 +162,7 @@ flowchart LR
 - `SportsDataProvider` 接口
 - `createSportsDataProvider()` 工厂
 - `mock` provider
+- `football_data` provider 适配器，基于 football-data.org v4 HTTP API
 
 ### 4.6 packages/ai
 
@@ -269,6 +270,8 @@ GET  /matches/:id
 GET  /teams/:id
 GET  /teams/:id/form
 GET  /live/matches/events
+GET  /sync/status
+POST /sync/run
 POST /favorites/teams
 DELETE /favorites/teams/:teamId
 POST /ai/query
@@ -348,6 +351,8 @@ export interface SportsDataProvider {
 
 ## 9. 缓存策略
 
+当前 API 已有第一版内存 TTL cache，用于本地开发和 provider 调用保护。Redis 仍是目标缓存层，等 Docker/Redis 环境准备好后替换为分布式缓存。
+
 | 数据 | TTL | 说明 |
 |---|---:|---|
 | 今日比赛 | 30-120 秒 | 根据是否有进行中比赛动态调整 |
@@ -370,6 +375,8 @@ DATABASE_URL
 REDIS_URL
 SPORTS_PROVIDER
 FOOTBALL_DATA_API_KEY
+FOOTBALL_DATA_BASE_URL
+FOOTBALL_DATA_COMPETITIONS
 THESPORTSDB_API_KEY
 OPENAI_API_KEY
 ```
@@ -448,3 +455,9 @@ MVP 至少记录：
 
 - `/` 今日比赛、积分榜、球队状态
 - `/teams/[id]` 球队详情、近期状态、相关比赛
+
+当前 API 已实现：
+
+- mock provider 和 football-data provider 选择
+- 内存 TTL cache
+- 手动同步任务状态：`GET /sync/status`、`POST /sync/run`

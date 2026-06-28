@@ -1,6 +1,6 @@
 # OpenScore 环境准备与复检
 
-更新时间：2026-06-28
+更新时间：2026-06-29
 
 ## 1. 当前本机复检结果
 
@@ -87,6 +87,8 @@ Copy-Item .env.example .env
 | `REDIS_URL` | 是 | Redis 连接串 |
 | `SPORTS_PROVIDER` | 是 | MVP 可先用 `mock` |
 | `FOOTBALL_DATA_API_KEY` | 否 | 接入 football-data.org 时填写 |
+| `FOOTBALL_DATA_BASE_URL` | 是 | 默认 `https://api.football-data.org/v4` |
+| `FOOTBALL_DATA_COMPETITIONS` | 是 | 默认 `PL`，多个赛事用英文逗号分隔 |
 | `THESPORTSDB_API_KEY` | 否 | 接入 TheSportsDB 时填写 |
 | `AI_PROVIDER` | 是 | MVP 可先用 `disabled` |
 | `OPENAI_API_KEY` | 否 | 启用 AI 查询时填写 |
@@ -123,8 +125,11 @@ Copy-Item .env.example .env
 
 - pnpm workspace scaffold
 - `.env.example`
+- 本机 `.env` mock 开发配置
 - Web/API 基础工程
 - mock provider
+- football-data provider 适配器
+- API 内存缓存和手动同步状态接口
 - 第一版 `docker-compose.yml`
 - Prisma schema 与 validate/generate 脚本
 

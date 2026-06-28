@@ -122,6 +122,18 @@ pnpm typecheck
 pnpm build
 ```
 
+Provider configuration:
+
+```bash
+SPORTS_PROVIDER=mock
+
+# Optional football-data.org provider
+SPORTS_PROVIDER=football_data
+FOOTBALL_DATA_API_KEY=your-api-key
+FOOTBALL_DATA_BASE_URL=https://api.football-data.org/v4
+FOOTBALL_DATA_COMPETITIONS=PL
+```
+
 Database helpers:
 
 ```bash
@@ -140,7 +152,7 @@ pnpm db:generate
 
 ## Status
 
-OpenScore is at the project planning and repository bootstrapping stage.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, football-data provider adapter, in-memory API cache, and manual sync status endpoints. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
 
 See:
 

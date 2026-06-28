@@ -13,6 +13,16 @@ export type TeamQuery = {
   teamId: string;
 };
 
+export type FootballDataProviderOptions = {
+  apiKey?: string;
+  baseUrl?: string;
+  competitionCodes?: string[];
+};
+
+export type SportsDataProviderOptions = {
+  footballData?: FootballDataProviderOptions;
+};
+
 export type AiQueryResult = {
   query: string;
   answer: string;
@@ -31,4 +41,3 @@ export type SportsDataProvider = {
   fetchTeamForm(input: TeamQuery): Promise<Array<"W" | "D" | "L">>;
   answerQuery(query: string): Promise<AiQueryResult>;
 };
-
