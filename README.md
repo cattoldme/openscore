@@ -81,7 +81,8 @@ Commercial data sources can be added later, but the MVP should prove the experie
 │   ├── ROADMAP.md
 │   ├── TECH_STACK.md
 │   ├── ARCHITECTURE.md
-│   └── DATA_MODEL.md
+│   ├── DATA_MODEL.md
+│   └── ENVIRONMENT.md
 └── .gitignore
 ```
 
@@ -106,4 +107,5 @@ See:
 - [Tech Stack](docs/TECH_STACK.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Data Model](docs/DATA_MODEL.md)
+- [Environment](docs/ENVIRONMENT.md)
 - [Roadmap](docs/ROADMAP.md)

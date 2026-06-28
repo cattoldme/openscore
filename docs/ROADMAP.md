@@ -9,6 +9,7 @@
 - [x] Confirm public product scope
 - [x] Confirm technical stack
 - [x] Confirm first architecture baseline
+- [x] Add environment template and preparation checklist
 - [ ] Confirm first data provider
 
 ## Phase 1 - Prototype
