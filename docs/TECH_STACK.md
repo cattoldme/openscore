@@ -153,7 +153,7 @@ Redis 用于：
 
 缓存不是事实来源，PostgreSQL 才是主数据源。
 
-当前 API 已实现内存 TTL cache。它只作为 Redis 前的 MVP fallback，不作为跨实例缓存方案。
+当前 API 已实现内存 TTL cache 和 Redis cache adapter。内存 cache 用于本地开发和 CI；Docker Compose 默认使用 Redis cache。Redis sync lock 仍待接入。
 
 ## 7. 实时方案
 

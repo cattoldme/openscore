@@ -17,6 +17,7 @@ const api = spawn(process.execPath, [join(rootDir, "apps/api/dist/index.js")], {
     WEB_PUBLIC_BASE_URL: webBaseUrl,
     NEXT_PUBLIC_API_BASE_URL: apiBaseUrl,
     SPORTS_REPOSITORY: "memory",
+    CACHE_PROVIDER: "memory",
     SPORTS_PROVIDER: "mock",
     DATABASE_URL: "postgresql://openscore:openscore@localhost:5432/openscore?schema=public",
     REDIS_URL: "redis://localhost:6379",

@@ -17,6 +17,7 @@ const child = spawn(childCommand, childArgs, {
     WEB_PUBLIC_BASE_URL: "http://127.0.0.1:3000",
     NEXT_PUBLIC_API_BASE_URL: baseUrl,
     SPORTS_REPOSITORY: "memory",
+    CACHE_PROVIDER: "memory",
     SPORTS_PROVIDER: "mock",
     DATABASE_URL: "postgresql://openscore:openscore@localhost:5432/openscore?schema=public",
     REDIS_URL: "redis://localhost:6379",
@@ -97,6 +98,7 @@ async function assertSyncStatus() {
   assert(body.data?.repository?.matches >= 4, "Expected repository matches count.");
   assert(body.data?.repository?.standings >= 6, "Expected repository standings count.");
   assert(body.data?.repository?.teams >= 6, "Expected repository teams count.");
+  assert(body.data?.cache?.provider === "memory", "Expected memory cache provider.");
 }
 
 async function assertMatches() {

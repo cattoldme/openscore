@@ -16,7 +16,8 @@
     "@openscore/db": "workspace:*",
     "@openscore/domain": "workspace:*",
     "@openscore/providers": "workspace:*",
-    "hono": "^4.10.0"
+    "hono": "^4.10.0",
+    "redis": "^6.0.1"
   },
   "devDependencies": {
     "tsup": "^8.5.0",

@@ -13,6 +13,7 @@
 - 环境变量校验：`packages/config`
 - mock 数据源和 football-data provider 适配器：`packages/providers`
 - Prisma schema 和 repository 抽象：`packages/db`
+- 内存 cache 和 Redis cache adapter
 - Dockerfile 和 Docker Compose：`Dockerfile`、`docker-compose.yml`，Compose 会先执行 `db-init`
 - GitHub Actions CI：`.github/workflows/ci.yml`
 - 今日比赛、积分榜、球队详情、球队状态、本地收藏、repository 读写、缓存、手动同步状态和自然语言查询的最小产品链路
@@ -88,7 +89,7 @@ API 冒烟测试：
 pnpm smoke:api
 ```
 
-`pnpm smoke:api` 会启动生产构建后的 API 到独立端口 `4100`，使用 `mock` provider 和内存 repository，依次检查 `/health`、`/sync/run`、`/sync/status`、今日比赛、积分榜、球队详情和 AI 查询。运行前需要先执行 `pnpm build`。
+`pnpm smoke:api` 会启动生产构建后的 API 到独立端口 `4100`，使用 `mock` provider、内存 repository 和内存 cache，依次检查 `/health`、`/sync/run`、`/sync/status`、今日比赛、积分榜、球队详情和 AI 查询。运行前需要先执行 `pnpm build`。
 
 Web 冒烟测试：
 
@@ -96,7 +97,7 @@ Web 冒烟测试：
 pnpm smoke:web
 ```
 
-`pnpm smoke:web` 会启动生产构建后的 API 和 Web，API 端口为 `4101`，Web 端口为 `3100`，使用 `mock` provider 和内存 repository，检查首页与 `/teams/arsenal` 是否能渲染关键中文内容。运行前需要先执行 `pnpm build`。
+`pnpm smoke:web` 会启动生产构建后的 API 和 Web，API 端口为 `4101`，Web 端口为 `3100`，使用 `mock` provider、内存 repository 和内存 cache，检查首页与 `/teams/arsenal` 是否能渲染关键中文内容。运行前需要先执行 `pnpm build`。
 
 Prisma schema 验证：
 
@@ -198,6 +199,19 @@ start byte index ... is not a char boundary
 $env:SPORTS_PROVIDER='mock'
 ```
 
+默认使用内存 cache：
+
+```powershell
+$env:CACHE_PROVIDER='memory'
+```
+
+切换到 Redis cache：
+
+```powershell
+$env:CACHE_PROVIDER='redis'
+$env:REDIS_URL='redis://localhost:6379'
+```
+
 切换到 football-data provider：
 
 ```powershell
@@ -221,7 +235,7 @@ football-data provider 当前已标准化：
 - AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema、首个 migration、seed dry-run 和 Compose db-init 配置已验证；真实数据库 migration/seed 因当前机器 `docker` 命令不可用尚未实测。
-- CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke，但还没有真实 PostgreSQL、Redis、provider key 或浏览器级端到端测试。
+- CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke，但还没有真实 PostgreSQL、Redis runtime、provider key 或浏览器级端到端测试。
 
 ## 9. 下一步建议
 

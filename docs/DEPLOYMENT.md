@@ -11,7 +11,7 @@ OpenScore MVP 先支持 Docker Compose 自建部署：
 - `postgres`：PostgreSQL 16，默认端口 `5432`
 - `redis`：Redis 7，默认端口 `6379`
 
-本地开发默认使用内存 repository 和内存 cache。Docker Compose 默认使用 PostgreSQL repository，并通过 `db-init` 服务在 API 启动前执行 `pnpm db:migrate && pnpm db:seed`。Redis 已进入部署拓扑，用于后续分布式缓存和同步锁接入。
+本地开发默认使用内存 repository 和内存 cache。Docker Compose 默认使用 PostgreSQL repository 和 Redis cache，并通过 `db-init` 服务在 API 启动前执行 `pnpm db:migrate && pnpm db:seed`。Redis sync lock 仍待后续接入。
 
 ## 2. 前置要求
 
@@ -39,15 +39,18 @@ Copy-Item .env.example .env
 
 ```env
 SPORTS_REPOSITORY=memory
+CACHE_PROVIDER=memory
 SPORTS_PROVIDER=mock
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
-Docker Compose 会使用容器内 PostgreSQL，不读取本机开发用的 `DATABASE_URL=localhost`。如需覆盖 Compose 数据库或 repository，可设置：
+Docker Compose 会使用容器内 PostgreSQL 和 Redis，不读取本机开发用的 `DATABASE_URL=localhost` 或 `REDIS_URL=localhost`。如需覆盖 Compose 数据库、Redis、repository 或 cache，可设置：
 
 ```env
 COMPOSE_DATABASE_URL=postgresql://openscore:openscore@postgres:5432/openscore?schema=public
+COMPOSE_REDIS_URL=redis://redis:6379
 COMPOSE_SPORTS_REPOSITORY=postgres
+COMPOSE_CACHE_PROVIDER=redis
 ```
 
 如果不使用 Docker Compose，而是本机或云端 PostgreSQL，则先执行 migration 和 seed，然后切换 repository：
@@ -59,7 +62,9 @@ pnpm db:seed
 
 ```env
 SPORTS_REPOSITORY=postgres
+CACHE_PROVIDER=redis
 DATABASE_URL=postgresql://openscore:openscore@localhost:5432/openscore?schema=public
+REDIS_URL=redis://localhost:6379
 ```
 
 接入 football-data.org 时填写：
@@ -94,7 +99,7 @@ docker compose up --build -d
 
 1. `postgres` 健康检查通过
 2. `db-init` 执行 migration 和 seed
-3. `api` 使用 PostgreSQL repository 启动
+3. `api` 使用 PostgreSQL repository 和 Redis cache 启动
 4. `web` 等 API 健康后启动
 
 ## 5. 验证部署
@@ -153,7 +158,7 @@ docker compose down -v
 - 本机复检时 `docker` 命令不可用，因此本文的 Docker Compose 运行还未在当前机器实测。
 - PostgreSQL schema、migration、repository、seed dry-run 和 Compose 配置已验证到类型/构建层，但当前机器没有 PostgreSQL/Docker，尚未执行真实 Docker Compose smoke test。
 - 本地开发默认 `SPORTS_REPOSITORY=memory` 时，服务重启后内存 repository 数据会丢失；Docker Compose 默认使用 `COMPOSE_SPORTS_REPOSITORY=postgres`。
-- Redis 已在拓扑中，但 API cache 仍是内存 TTL cache。
+- Redis cache adapter 已实现，但 Redis sync lock 仍待接入。
 - football-data.org 真实数据需要 `FOOTBALL_DATA_API_KEY`。
 - AI 查询当前是确定性 grounded MVP，还没有接真实 LLM provider。
 
@@ -161,6 +166,6 @@ docker compose down -v
 
 下一步：
 
-1. 把 Redis 接入 cache 和 sync lock
+1. 把 Redis 接入 sync lock
 2. 拆分生产 Dockerfile，减小镜像体积
 3. 添加镜像发布流程

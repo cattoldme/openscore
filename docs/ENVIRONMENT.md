@@ -87,6 +87,9 @@ Copy-Item .env.example .env
 | `DATABASE_URL` | 是 | PostgreSQL 连接串 |
 | `COMPOSE_DATABASE_URL` | 否 | Docker Compose 内部数据库连接串，默认使用 `postgres` 服务 |
 | `REDIS_URL` | 是 | Redis 连接串 |
+| `COMPOSE_REDIS_URL` | 否 | Docker Compose 内部 Redis 连接串，默认使用 `redis` 服务 |
+| `CACHE_PROVIDER` | 是 | 默认 `memory`，可切换为 `redis` |
+| `COMPOSE_CACHE_PROVIDER` | 否 | Docker Compose cache 选择，默认 `redis` |
 | `SPORTS_REPOSITORY` | 是 | 默认 `memory`，可切换为 `postgres` |
 | `COMPOSE_SPORTS_REPOSITORY` | 否 | Docker Compose repository 选择，默认 `postgres` |
 | `SPORTS_PROVIDER` | 是 | MVP 可先用 `mock` |
@@ -133,7 +136,8 @@ Copy-Item .env.example .env
 - mock provider
 - football-data provider 适配器
 - 内存 repository 和 PostgreSQL repository
-- API 内存缓存和手动同步状态接口
+- 内存 cache 和 Redis cache adapter
+- API cache 状态和手动同步状态接口
 - 第一版 `Dockerfile`
 - Web/API/PostgreSQL/Redis `docker-compose.yml`
 - Docker Compose `db-init` migration/seed 服务
@@ -177,4 +181,4 @@ GitHub Actions 使用 Node.js 24 和 pnpm 11，默认 mock provider 与内存 re
 - API smoke test
 - Web smoke test
 
-真实数据库 migration/seed、Redis cache、真实 provider smoke test 和浏览器级端到端测试仍需要后续补齐。
+真实数据库 migration/seed、Redis runtime smoke、真实 provider smoke test 和浏览器级端到端测试仍需要后续补齐。

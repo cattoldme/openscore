@@ -5,6 +5,7 @@ import { streamSSE } from "hono/streaming";
 import { loadServerEnv } from "@openscore/config";
 import { createInMemorySportsRepository, createPrismaClient, createPrismaSportsRepository } from "@openscore/db";
 import { createSyncRunner } from "./jobs/sync-jobs";
+import { createRedisCache, TtlCache } from "./services/cache";
 import { createSportsService } from "./services/sports-service";
 
 const env = loadServerEnv();
@@ -14,8 +15,10 @@ const repository =
   env.SPORTS_REPOSITORY === "postgres"
     ? createPrismaSportsRepository(createPrismaClient(env.DATABASE_URL))
     : createInMemorySportsRepository();
+const cache = env.CACHE_PROVIDER === "redis" ? await createRedisCache(env.REDIS_URL) : new TtlCache();
 const sports = createSportsService(env.SPORTS_PROVIDER, {
   repository,
+  cache,
   footballData: {
     apiKey: env.FOOTBALL_DATA_API_KEY,
     baseUrl: env.FOOTBALL_DATA_BASE_URL,
@@ -54,14 +57,14 @@ app.get("/sync/status", async (c) =>
     data: {
       sync: syncRunner.getSnapshot(),
       repository: await sports.getRepositorySnapshot(),
-      cache: sports.getCacheSnapshot()
+      cache: await sports.getCacheSnapshot()
     },
     meta: buildMeta()
   })
 );
 
 app.post("/sync/run", async (c) => {
-  sports.clearCache();
+  await sports.clearCache();
 
   return c.json({
     data: await syncRunner.runNow(),

@@ -14,6 +14,7 @@ env:
   CI: "true"
   NEXT_TELEMETRY_DISABLED: "1"
   SPORTS_REPOSITORY: memory
+  CACHE_PROVIDER: memory
   SPORTS_PROVIDER: mock
   DATABASE_URL: postgresql://openscore:openscore@localhost:5432/openscore?schema=public
   REDIS_URL: redis://localhost:6379

@@ -36,6 +36,7 @@
 - [x] Add PostgreSQL repository implementation
 - [x] Add sync jobs
 - [x] Add cache strategy
+- [x] Add Redis cache adapter
 
 ## Phase 3 - MVP
 
@@ -60,6 +61,7 @@
 - [x] Add issue templates
 - [x] Add Docker Compose
 - [x] Add Compose database initialization
+- [x] Add Compose Redis cache default
 - [x] Add CI checks
 - [x] Add API smoke test
 - [x] Add Web smoke test

@@ -1,7 +1,7 @@
 import type { ProviderCode } from "@openscore/domain";
 import { createInMemorySportsRepository, type SportsRepository } from "@openscore/db";
 import { createSportsDataProvider, type SportsDataProviderOptions } from "@openscore/providers";
-import { TtlCache } from "./cache";
+import { type CacheStore, TtlCache } from "./cache";
 
 const TTL = {
   sports: 60 * 60 * 1000,
@@ -16,12 +16,13 @@ const TTL = {
 
 export type CreateSportsServiceOptions = SportsDataProviderOptions & {
   repository?: SportsRepository;
+  cache?: CacheStore;
 };
 
 export function createSportsService(providerCode: ProviderCode, options: CreateSportsServiceOptions = {}) {
   const provider = createSportsDataProvider(providerCode, options);
   const repository = options.repository ?? createInMemorySportsRepository();
-  const cache = new TtlCache();
+  const cache = options.cache ?? new TtlCache();
 
   return {
     provider,
@@ -176,8 +177,8 @@ export function createSportsService(providerCode: ProviderCode, options: CreateS
         };
       });
     },
-    clearCache(prefix?: string) {
-      cache.clear(prefix);
+    async clearCache(prefix?: string) {
+      await cache.clear(prefix);
     },
     getCacheSnapshot() {
       return cache.snapshot();

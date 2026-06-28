@@ -361,7 +361,7 @@ export interface SportsDataProvider {
 
 ## 9. 缓存策略
 
-当前 API 已有第一版内存 TTL cache，用于本地开发和 provider 调用保护。Redis 仍是目标缓存层，等 Docker/Redis 环境准备好后替换为分布式缓存。
+当前 API 已有内存 TTL cache 和 Redis cache adapter。默认本地/CI 使用内存 cache；Docker Compose 默认使用 Redis cache。Redis sync lock 和 SSE fanout 仍是后续工作。
 
 | 数据 | TTL | 说明 |
 |---|---:|---|
@@ -471,7 +471,7 @@ MVP 至少记录：
 
 - mock provider 和 football-data provider 选择
 - repository 读写抽象、内存 repository 和 PostgreSQL repository
-- 内存 TTL cache
+- 内存 TTL cache 和 Redis cache adapter
 - 手动同步任务状态：`GET /sync/status`、`POST /sync/run`
 - 确定性 AI 查询 MVP：`POST /ai/query`
 
