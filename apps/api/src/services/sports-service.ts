@@ -135,7 +135,46 @@ export function createSportsService(providerCode: ProviderCode, options: CreateS
       });
     },
     async answerQuery(query: string) {
-      return cache.getOrSet(`ai:${query}`, TTL.ai, () => provider.answerQuery(query));
+      return cache.getOrSet(`ai:${query}`, TTL.ai, async () => {
+        const [liveMatches, todayMatches, standings] = await Promise.all([
+          this.listLiveMatches(),
+          this.listMatches({ date: "today" }),
+          this.getStandings("premier-league")
+        ]);
+        const teamRow = standings.find((row) => query.includes(row.teamName) || query.includes(row.teamId));
+
+        if (teamRow) {
+          const teamCards = todayMatches.filter(
+            (match) => match.homeTeamId === teamRow.teamId || match.awayTeamId === teamRow.teamId
+          );
+
+          return {
+            query,
+            answer: `${teamRow.teamName} 当前排名第 ${teamRow.position}，${teamRow.played} 场拿到 ${teamRow.points} 分，近况为 ${formatForm(teamRow.form)}。`,
+            cards: teamCards.slice(0, 3),
+            grounded: true
+          };
+        }
+
+        if (isLiveQuery(query)) {
+          return {
+            query,
+            answer:
+              liveMatches.length > 0
+                ? `当前有 ${liveMatches.length} 场进行中的比赛。`
+                : "当前没有进行中的比赛。",
+            cards: liveMatches.slice(0, 3),
+            grounded: true
+          };
+        }
+
+        return {
+          query,
+          answer: `今天共有 ${todayMatches.length} 场比赛，其中 ${liveMatches.length} 场进行中。`,
+          cards: todayMatches.slice(0, 3),
+          grounded: true
+        };
+      });
     },
     clearCache(prefix?: string) {
       cache.clear(prefix);
@@ -147,4 +186,16 @@ export function createSportsService(providerCode: ProviderCode, options: CreateS
       return repository.snapshot();
     }
   };
+}
+
+function isLiveQuery(query: string): boolean {
+  return query.includes("进行中") || query.includes("现在") || query.toLowerCase().includes("live");
+}
+
+function formatForm(form: Array<"W" | "D" | "L">): string {
+  if (form.length === 0) {
+    return "暂无近期状态";
+  }
+
+  return form.join("-");
 }

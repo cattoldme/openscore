@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AiQueryPanel } from "../components/ai-query-panel";
 import { ScoreCard } from "../components/score-card";
 import { StandingsTable } from "../components/standings-table";
 import { getHomeData } from "../lib/api";
@@ -44,12 +45,7 @@ export default async function HomePage() {
         </div>
 
         <aside className="flex flex-col gap-4">
-          <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-soft">
-            <h2 className="mb-3 text-xl font-bold text-ink">AI 查询预留</h2>
-            <div className="rounded-md bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-              输入“今晚英超有哪些比赛”这类问题时，后续会先检索结构化赛事数据，再生成中文回答。
-            </div>
-          </section>
+          <AiQueryPanel />
 
           <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-soft">
             <h2 className="mb-3 text-xl font-bold text-ink">球队状态</h2>

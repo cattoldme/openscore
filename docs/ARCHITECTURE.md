@@ -260,6 +260,8 @@ sequenceDiagram
   API-->>Web: grounded response
 ```
 
+当前实现是确定性 grounded MVP：`POST /ai/query` 会检索今日比赛、进行中比赛和积分榜，按球队状态/进行中比赛/今日赛程做简单意图路由，返回中文回答、相关比赛卡片、数据源和更新时间。LLM provider 后续接入，但仍必须使用同一套结构化检索结果作为事实来源。
+
 ## 6. API 设计基线
 
 MVP REST API：
@@ -459,6 +461,7 @@ MVP 至少记录：
 当前 Web 已实现：
 
 - `/` 今日比赛、积分榜、球队状态
+- `/` 自然语言查询面板和 grounded 回答展示
 - `/teams/[id]` 球队详情、近期状态、相关比赛
 
 当前 API 已实现：
@@ -467,3 +470,4 @@ MVP 至少记录：
 - repository 读写抽象和内存 repository
 - 内存 TTL cache
 - 手动同步任务状态：`GET /sync/status`、`POST /sync/run`
+- 确定性 AI 查询 MVP：`POST /ai/query`

@@ -14,7 +14,7 @@
 - mock 数据源和 football-data provider 适配器：`packages/providers`
 - Prisma schema 和 repository 抽象：`packages/db`
 - Docker Compose：`docker-compose.yml`
-- 今日比赛、积分榜、球队详情、球队状态、本地收藏、repository 读写、缓存和手动同步状态的最小产品链路
+- 今日比赛、积分榜、球队详情、球队状态、本地收藏、repository 读写、缓存、手动同步状态和自然语言查询的最小产品链路
 
 ## 2. 安装依赖
 
@@ -110,9 +110,12 @@ Invoke-RestMethod http://localhost:4000/competitions/premier-league/standings
 Invoke-RestMethod http://localhost:4000/teams/arsenal
 Invoke-RestMethod http://localhost:4000/sync/status
 Invoke-RestMethod -Method Post http://localhost:4000/sync/run
+Invoke-RestMethod -Method Post http://localhost:4000/ai/query -ContentType 'application/json' -Body '{"query":"阿森纳最近状态怎么样？"}'
 ```
 
 `POST /sync/run` 会从当前 provider 拉取 sports、competitions、today fixtures 和 `premier-league` standings，并写入当前 repository。`GET /sync/status` 会返回 sync、repository 和 cache 三块状态，方便确认 API 当前读的是本地数据层还是 provider fallback。
+
+`POST /ai/query` 当前是确定性 grounded MVP：API 会先检索今日比赛、进行中比赛和积分榜，再按简单意图路由生成中文回答，并返回相关比赛卡片、数据源和更新时间。
 
 Web 快速检查：
 
@@ -161,7 +164,7 @@ football-data provider 当前已标准化：
 - 默认仍使用 mock provider；football-data 适配器已实现，但本机没有真实 API key，尚未做线上数据 smoke test。
 - Docker 未准备好，PostgreSQL/Redis 还没有本地容器环境。
 - 当前 repository 默认是内存实现，服务重启后同步数据会丢失；PostgreSQL repository 等 Docker/数据库环境准备后接入。
-- AI 查询入口在 API 中已有占位实现，但尚未接真实模型。
+- AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema 已验证，但未执行真实数据库 migration，因为当前机器 `docker` 命令不可用。
 

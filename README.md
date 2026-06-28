@@ -114,6 +114,7 @@ Default URLs:
 
 - Web: `http://localhost:3000`
 - API: `http://localhost:4000`
+- Browser API: `NEXT_PUBLIC_API_BASE_URL=http://localhost:4000`
 
 Verify:
 
@@ -152,7 +153,7 @@ pnpm db:generate
 
 ## Status
 
-OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, repository abstraction, football-data provider adapter, in-memory API cache, and manual sync status endpoints. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, repository abstraction, football-data provider adapter, in-memory API cache, manual sync status endpoints, and a grounded natural-language query MVP. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
 
 See:
 

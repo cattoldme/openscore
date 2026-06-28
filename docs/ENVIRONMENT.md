@@ -83,6 +83,7 @@ Copy-Item .env.example .env
 | `NODE_ENV` | 是 | 本地为 `development` |
 | `WEB_PUBLIC_BASE_URL` | 是 | Web 访问地址 |
 | `API_BASE_URL` | 是 | API 访问地址 |
+| `NEXT_PUBLIC_API_BASE_URL` | 是 | 浏览器端调用 API 的公开地址 |
 | `DATABASE_URL` | 是 | PostgreSQL 连接串 |
 | `REDIS_URL` | 是 | Redis 连接串 |
 | `SPORTS_PROVIDER` | 是 | MVP 可先用 `mock` |

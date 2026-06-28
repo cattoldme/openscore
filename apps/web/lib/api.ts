@@ -23,6 +23,15 @@ type TeamResponse = {
   form: Array<"W" | "D" | "L">;
 };
 
+export type AiQueryResult = {
+  query: string;
+  answer: string;
+  cards: MatchSummary[];
+  grounded: boolean;
+};
+
+export type AiQueryApiResponse = ApiResponse<AiQueryResult>;
+
 export type TeamPageData = {
   apiAvailable: boolean;
   team: Team | null;
@@ -105,6 +114,23 @@ export async function getTeamPageData(teamId: string): Promise<TeamPageData> {
   }
 }
 
+export async function querySportsData(query: string): Promise<AiQueryApiResponse> {
+  const apiBaseUrl = getBrowserApiBaseUrl();
+  const response = await fetch(`${apiBaseUrl}/ai/query`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ query })
+  });
+
+  if (!response.ok) {
+    throw new Error(`OpenScore AI query failed: ${response.status}`);
+  }
+
+  return response.json() as Promise<AiQueryApiResponse>;
+}
+
 async function fetchJson<T>(url: string): Promise<ApiResponse<T>> {
   const response = await fetch(url, {
     cache: "no-store"
@@ -115,6 +141,10 @@ async function fetchJson<T>(url: string): Promise<ApiResponse<T>> {
   }
 
   return response.json() as Promise<ApiResponse<T>>;
+}
+
+function getBrowserApiBaseUrl(): string {
+  return process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
 }
 
 function buildTeamForms(matches: MatchSummary[]) {

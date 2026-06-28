@@ -45,11 +45,11 @@
 
 ## Phase 4 - AI Query
 
-- [ ] Add natural-language query UI
-- [ ] Add intent routing
-- [ ] Retrieve structured match/team/standing data
-- [ ] Generate Chinese answers grounded in retrieved data
-- [ ] Add source/update timestamp to AI answers
+- [x] Add natural-language query UI
+- [x] Add intent routing
+- [x] Retrieve structured match/team/standing data
+- [x] Generate Chinese answers grounded in retrieved data
+- [x] Add source/update timestamp to AI answers
 
 ## Phase 5 - Open Source Release
 
