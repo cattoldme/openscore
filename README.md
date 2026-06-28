@@ -74,6 +74,13 @@ Commercial data sources can be added later, but the MVP should prove the experie
 
 ```text
 .
+├── apps
+│   ├── api
+│   └── web
+├── packages
+│   ├── config
+│   ├── domain
+│   └── providers
 ├── README.md
 ├── LICENSE
 ├── docs
@@ -82,11 +89,36 @@ Commercial data sources can be added later, but the MVP should prove the experie
 │   ├── TECH_STACK.md
 │   ├── ARCHITECTURE.md
 │   ├── DATA_MODEL.md
-│   └── ENVIRONMENT.md
+│   ├── ENVIRONMENT.md
+│   └── DEVELOPMENT.md
 └── .gitignore
 ```
 
-Application code will be added after the product and architecture baseline is confirmed.
+## Development
+
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Run API and Web locally:
+
+```bash
+pnpm dev
+```
+
+Default URLs:
+
+- Web: `http://localhost:3000`
+- API: `http://localhost:4000`
+
+Verify:
+
+```bash
+pnpm typecheck
+pnpm build
+```
 
 ## Project Principles
 
@@ -108,4 +140,5 @@ See:
 - [Architecture](docs/ARCHITECTURE.md)
 - [Data Model](docs/DATA_MODEL.md)
 - [Environment](docs/ENVIRONMENT.md)
+- [Development](docs/DEVELOPMENT.md)
 - [Roadmap](docs/ROADMAP.md)

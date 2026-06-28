@@ -112,7 +112,6 @@ Copy-Item .env.example .env
 - Docker Desktop 或等价的 PostgreSQL/Redis 环境
 - 第一版 `docker-compose.yml`
 - `.env` 本地文件
-- pnpm workspace scaffold
 
 可以稍后补：
 
@@ -121,3 +120,9 @@ Copy-Item .env.example .env
 - CI
 - 部署平台配置
 
+已补齐：
+
+- pnpm workspace scaffold
+- `.env.example`
+- Web/API 基础工程
+- mock provider

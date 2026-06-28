@@ -1,0 +1,19 @@
+{
+  "name": "openscore",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @openscore/api --filter @openscore/web dev",
+    "dev:web": "pnpm --filter @openscore/web dev",
+    "dev:api": "pnpm --filter @openscore/api dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}
+

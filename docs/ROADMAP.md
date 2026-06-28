@@ -14,19 +14,19 @@
 
 ## Phase 1 - Prototype
 
-- [ ] Create pnpm workspace
-- [ ] Create Next.js + TypeScript web app
-- [ ] Create Hono API app
-- [ ] Add Tailwind CSS
-- [ ] Build mobile-first shell
-- [ ] Build today matches view with mock data
-- [ ] Build league standings view with mock data
+- [x] Create pnpm workspace
+- [x] Create Next.js + TypeScript web app
+- [x] Create Hono API app
+- [x] Add Tailwind CSS
+- [x] Build mobile-first shell
+- [x] Build today matches view with mock data
+- [x] Build league standings view with mock data
 - [ ] Build team detail view with mock data
-- [ ] Add local favorites
+- [x] Add local favorites
 
 ## Phase 2 - Data Layer
 
-- [ ] Define normalized domain models
+- [x] Define normalized domain models
 - [ ] Implement provider adapter interface
 - [ ] Add first football data provider
 - [ ] Add PostgreSQL schema
