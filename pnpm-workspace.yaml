@@ -3,8 +3,12 @@ packages:
   - packages/*
 
 onlyBuiltDependencies:
+  - "@prisma/engines"
   - esbuild
+  - prisma
   - sharp
 allowBuilds:
+  '@prisma/engines': true
   esbuild: true
+  prisma: true
   sharp: true

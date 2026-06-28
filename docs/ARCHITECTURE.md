@@ -75,8 +75,9 @@ flowchart LR
 │   └── config
 │       ├── env
 │       └── eslint
+├── docker-compose.yml
 ├── docs
-└── docker-compose.yml
+└── pnpm-workspace.yaml
 ```
 
 ## 4. 模块边界
@@ -155,6 +156,12 @@ flowchart LR
 - provider attribution
 
 所有 provider 必须实现统一接口。
+
+当前已实现：
+
+- `SportsDataProvider` 接口
+- `createSportsDataProvider()` 工厂
+- `mock` provider
 
 ### 4.6 packages/ai
 
@@ -436,4 +443,3 @@ MVP 至少记录：
 - 采用 SSE 做比分实时更新
 - 采用 provider adapter 隔离外部数据源
 - AI 回答必须基于结构化检索数据
-

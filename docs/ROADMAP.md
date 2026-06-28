@@ -10,7 +10,7 @@
 - [x] Confirm technical stack
 - [x] Confirm first architecture baseline
 - [x] Add environment template and preparation checklist
-- [ ] Confirm first data provider
+- [x] Confirm first data provider
 
 ## Phase 1 - Prototype
 
@@ -27,9 +27,9 @@
 ## Phase 2 - Data Layer
 
 - [x] Define normalized domain models
-- [ ] Implement provider adapter interface
+- [x] Implement provider adapter interface
 - [ ] Add first football data provider
-- [ ] Add PostgreSQL schema
+- [x] Add PostgreSQL schema
 - [ ] Add sync jobs
 - [ ] Add cache strategy
 
@@ -39,7 +39,7 @@
 - [ ] Show real results
 - [ ] Show real standings
 - [ ] Show team recent form
-- [ ] Add PWA manifest
+- [x] Add PWA manifest
 - [ ] Add simple deployment guide
 
 ## Phase 4 - AI Query
@@ -54,6 +54,6 @@
 
 - [ ] Add contribution guide
 - [ ] Add issue templates
-- [ ] Add Docker Compose
+- [x] Add Docker Compose
 - [ ] Add hosted demo
 - [ ] Publish first release tag

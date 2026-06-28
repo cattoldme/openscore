@@ -110,7 +110,6 @@ Copy-Item .env.example .env
 必须补齐：
 
 - Docker Desktop 或等价的 PostgreSQL/Redis 环境
-- 第一版 `docker-compose.yml`
 - `.env` 本地文件
 
 可以稍后补：
@@ -126,3 +125,23 @@ Copy-Item .env.example .env
 - `.env.example`
 - Web/API 基础工程
 - mock provider
+- 第一版 `docker-compose.yml`
+- Prisma schema 与 validate/generate 脚本
+
+## 7. 非交互环境提示
+
+在 Codex 或 CI 这类非交互终端里，如果 pnpm 提示：
+
+```text
+ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY
+```
+
+使用：
+
+```powershell
+$env:CI='true'; pnpm install
+$env:CI='true'; pnpm typecheck
+$env:CI='true'; pnpm build
+```
+
+普通本地 PowerShell 终端通常不需要这样做。

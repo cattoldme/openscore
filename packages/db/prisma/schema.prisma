@@ -1,0 +1,269 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MatchStatus {
+  scheduled
+  live
+  paused
+  finished
+  postponed
+  cancelled
+  unknown
+}
+
+enum CompetitionType {
+  league
+  cup
+  friendly
+  international
+  unknown
+}
+
+enum MatchEventType {
+  goal
+  yellow_card
+  red_card
+  substitution
+  penalty
+  own_goal
+  unknown
+}
+
+enum ProviderCode {
+  mock
+  football_data
+  thesportsdb
+  openligadb
+  openfootball
+}
+
+enum SyncJobStatus {
+  running
+  succeeded
+  failed
+}
+
+model Sport {
+  id           String        @id @default(cuid())
+  code         String        @unique
+  name         String
+  competitions Competition[]
+  teams        Team[]
+  matches      Match[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Competition {
+  id          String          @id @default(cuid())
+  sportId     String
+  sport       Sport           @relation(fields: [sportId], references: [id])
+  name        String
+  shortName   String
+  countryCode String?
+  type        CompetitionType @default(league)
+  logoUrl     String?
+  seasons     Season[]
+  matches     Match[]
+  standings   Standing[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([sportId])
+}
+
+model Season {
+  id            String      @id @default(cuid())
+  competitionId String
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  name          String
+  startsAt      DateTime?
+  endsAt        DateTime?
+  current       Boolean     @default(false)
+  matches       Match[]
+  standings     Standing[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([competitionId])
+}
+
+model Venue {
+  id        String   @id @default(cuid())
+  name      String
+  city      String?
+  country   String?
+  teams     Team[]
+  matches   Match[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Team {
+  id          String      @id @default(cuid())
+  sportId     String
+  sport       Sport       @relation(fields: [sportId], references: [id])
+  venueId     String?
+  venue       Venue?      @relation(fields: [venueId], references: [id])
+  name        String
+  shortName   String
+  countryCode String?
+  logoUrl     String?
+  homeMatches Match[]     @relation("HomeTeam")
+  awayMatches Match[]     @relation("AwayTeam")
+  events      MatchEvent[]
+  standings   Standing[]
+  favorites   Favorite[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([sportId])
+  @@index([venueId])
+}
+
+model Match {
+  id             String       @id @default(cuid())
+  sportId        String
+  sport          Sport        @relation(fields: [sportId], references: [id])
+  competitionId  String
+  competition    Competition  @relation(fields: [competitionId], references: [id])
+  seasonId       String?
+  season         Season?      @relation(fields: [seasonId], references: [id])
+  venueId        String?
+  venue          Venue?       @relation(fields: [venueId], references: [id])
+  homeTeamId     String
+  homeTeam       Team         @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeamId     String
+  awayTeam       Team         @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  startsAt       DateTime
+  status         MatchStatus  @default(scheduled)
+  minute         Int?
+  homeScore      Int          @default(0)
+  awayScore      Int          @default(0)
+  homeHalfScore  Int?
+  awayHalfScore  Int?
+  events         MatchEvent[]
+  favorites      Favorite[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([startsAt])
+  @@index([status, startsAt])
+  @@index([competitionId, startsAt])
+  @@index([homeTeamId, startsAt])
+  @@index([awayTeamId, startsAt])
+}
+
+model MatchEvent {
+  id         String         @id @default(cuid())
+  matchId    String
+  match      Match          @relation(fields: [matchId], references: [id])
+  teamId     String?
+  team       Team?          @relation(fields: [teamId], references: [id])
+  playerName String?
+  minute     Int?
+  type       MatchEventType @default(unknown)
+  payload    Json?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([matchId])
+  @@index([teamId])
+}
+
+model Standing {
+  id             String      @id @default(cuid())
+  competitionId  String
+  competition    Competition @relation(fields: [competitionId], references: [id])
+  seasonId       String
+  season         Season      @relation(fields: [seasonId], references: [id])
+  teamId         String
+  team           Team        @relation(fields: [teamId], references: [id])
+  position       Int
+  played         Int         @default(0)
+  won            Int         @default(0)
+  drawn          Int         @default(0)
+  lost           Int         @default(0)
+  goalsFor       Int         @default(0)
+  goalsAgainst   Int         @default(0)
+  goalDifference Int         @default(0)
+  points         Int         @default(0)
+  form           String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  @@unique([competitionId, seasonId, teamId])
+  @@index([competitionId, seasonId, position])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  clientId  String
+  teamId    String?
+  team      Team?    @relation(fields: [teamId], references: [id])
+  matchId   String?
+  match     Match?   @relation(fields: [matchId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([clientId])
+  @@index([teamId])
+  @@index([matchId])
+}
+
+model ProviderSource {
+  id          String              @id @default(cuid())
+  code        ProviderCode        @unique
+  name        String
+  baseUrl     String?
+  enabled     Boolean             @default(true)
+  entityMaps  ProviderEntityMap[]
+  syncJobRuns SyncJobRun[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+model ProviderEntityMap {
+  id               String         @id @default(cuid())
+  providerSourceId String
+  providerSource   ProviderSource @relation(fields: [providerSourceId], references: [id])
+  entityType       String
+  entityId         String
+  providerEntityId String
+  rawPayload       Json?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@unique([providerSourceId, entityType, providerEntityId])
+  @@index([entityType, entityId])
+}
+
+model SyncJobRun {
+  id               String         @id @default(cuid())
+  providerSourceId String?
+  providerSource   ProviderSource? @relation(fields: [providerSourceId], references: [id])
+  jobType          String
+  status           SyncJobStatus
+  startedAt        DateTime       @default(now())
+  finishedAt       DateTime?
+  itemsRead        Int            @default(0)
+  itemsWritten     Int            @default(0)
+  errorCode        String?
+  errorMessage     String?
+
+  @@index([providerSourceId])
+  @@index([jobType, startedAt])
+}
+
+model AiQueryLog {
+  id          String   @id @default(cuid())
+  query       String
+  answer      String?
+  grounded    Boolean  @default(false)
+  sourceCount Int      @default(0)
+  createdAt   DateTime @default(now())
+}

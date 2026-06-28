@@ -10,6 +10,24 @@
 - 比赛、球队、联赛必须支持多个 provider mapping
 - MVP 只建足球需要的最小模型，但命名保留多体育项目扩展空间
 
+当前 Prisma schema 位于：
+
+```text
+packages/db/prisma/schema.prisma
+```
+
+Prisma 7 已将连接串配置迁移到：
+
+```text
+packages/db/prisma.config.ts
+```
+
+验证命令：
+
+```powershell
+pnpm db:validate
+```
+
 ## 2. 核心实体
 
 ### Sport
@@ -240,4 +258,3 @@ MVP 必须优先优化：
 - 比赛比分以最新 provider 更新时间为准
 - 若 provider 返回冲突数据，保留 rawPayload 并记录 sync warning
 - 删除外部数据不立刻删除内部实体，先标记不可见或过期
-

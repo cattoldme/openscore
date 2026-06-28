@@ -79,8 +79,10 @@ Commercial data sources can be added later, but the MVP should prove the experie
 │   └── web
 ├── packages
 │   ├── config
+│   ├── db
 │   ├── domain
 │   └── providers
+├── docker-compose.yml
 ├── README.md
 ├── LICENSE
 ├── docs
@@ -118,6 +120,13 @@ Verify:
 ```bash
 pnpm typecheck
 pnpm build
+```
+
+Database helpers:
+
+```bash
+pnpm db:validate
+pnpm db:generate
 ```
 
 ## Project Principles

@@ -127,6 +127,15 @@ API 不把外部 provider 的原始结构直接暴露给前端。
 
 数据库访问必须通过 repository/service 层，避免页面或 route handler 直接散落 Prisma 查询。
 
+当前采用 Prisma 7：
+
+- schema: `packages/db/prisma/schema.prisma`
+- config: `packages/db/prisma.config.ts`
+- validate: `pnpm db:validate`
+- generate: `pnpm db:generate`
+
+Prisma 7 不再把连接串写在 schema 的 `datasource.url` 中，连接串由 `prisma.config.ts` 读取 `DATABASE_URL`。
+
 ## 6. 缓存选型
 
 Redis 用于：
@@ -214,4 +223,3 @@ AI 查询不允许凭空回答。
 - 不使用未稳定 API
 - 前端、API、数据库迁移都必须可重复构建
 - 依赖升级单独提交，避免混在功能开发里
-

@@ -3,20 +3,11 @@ import { cors } from "hono/cors";
 import { Hono } from "hono";
 import { streamSSE } from "hono/streaming";
 import { loadServerEnv } from "@openscore/config";
-import {
-  findCompetitionById,
-  findMatchById,
-  findTeamById,
-  getCompetitionStandings,
-  getLiveMatches,
-  getMatchList,
-  getTeamForm,
-  mockCompetitions,
-  mockSports
-} from "@openscore/providers";
+import { createSportsService } from "./services/sports-service";
 
 const env = loadServerEnv();
 const app = new Hono();
+const sports = createSportsService(env.SPORTS_PROVIDER);
 
 app.use(
   "*",
@@ -37,14 +28,14 @@ app.get("/health", (c) =>
   })
 );
 
-app.get("/sports", (c) => c.json({ data: mockSports, meta: buildMeta() }));
+app.get("/sports", async (c) => c.json({ data: await sports.listSports(), meta: buildMeta() }));
 
-app.get("/competitions", (c) =>
-  c.json({ data: mockCompetitions, meta: buildMeta() })
+app.get("/competitions", async (c) =>
+  c.json({ data: await sports.listCompetitions(), meta: buildMeta() })
 );
 
-app.get("/competitions/:id/standings", (c) => {
-  const competition = findCompetitionById(c.req.param("id"));
+app.get("/competitions/:id/standings", async (c) => {
+  const competition = await sports.getCompetition(c.req.param("id"));
 
   if (!competition) {
     return c.json(notFound("COMPETITION_NOT_FOUND", "Competition not found."), 404);
@@ -53,14 +44,14 @@ app.get("/competitions/:id/standings", (c) => {
   return c.json({
     data: {
       competition,
-      rows: getCompetitionStandings(competition.id)
+      rows: await sports.getStandings(competition.id)
     },
     meta: buildMeta()
   });
 });
 
-app.get("/matches/today", (c) => {
-  const matches = getMatchList({ date: "today" });
+app.get("/matches/today", async (c) => {
+  const matches = await sports.listMatches({ date: "today" });
 
   return c.json({
     data: {
@@ -71,17 +62,17 @@ app.get("/matches/today", (c) => {
   });
 });
 
-app.get("/matches", (c) => {
+app.get("/matches", async (c) => {
   const status = c.req.query("status");
 
   return c.json({
-    data: getMatchList({ status }),
+    data: await sports.listMatches({ status }),
     meta: buildMeta()
   });
 });
 
-app.get("/matches/:id", (c) => {
-  const match = findMatchById(c.req.param("id"));
+app.get("/matches/:id", async (c) => {
+  const match = await sports.getMatch(c.req.param("id"));
 
   if (!match) {
     return c.json(notFound("MATCH_NOT_FOUND", "Match not found."), 404);
@@ -90,8 +81,9 @@ app.get("/matches/:id", (c) => {
   return c.json({ data: match, meta: buildMeta() });
 });
 
-app.get("/teams/:id", (c) => {
-  const team = findTeamById(c.req.param("id"));
+app.get("/teams/:id", async (c) => {
+  const teamId = c.req.param("id");
+  const [team, form] = await Promise.all([sports.getTeam(teamId), sports.getTeamForm(teamId)]);
 
   if (!team) {
     return c.json(notFound("TEAM_NOT_FOUND", "Team not found."), 404);
@@ -100,14 +92,14 @@ app.get("/teams/:id", (c) => {
   return c.json({
     data: {
       team,
-      form: getTeamForm(team.id)
+      form
     },
     meta: buildMeta()
   });
 });
 
-app.get("/teams/:id/form", (c) => {
-  const team = findTeamById(c.req.param("id"));
+app.get("/teams/:id/form", async (c) => {
+  const team = await sports.getTeam(c.req.param("id"));
 
   if (!team) {
     return c.json(notFound("TEAM_NOT_FOUND", "Team not found."), 404);
@@ -115,8 +107,8 @@ app.get("/teams/:id/form", (c) => {
 
   return c.json({
     data: {
-      teamId: team.id,
-      form: getTeamForm(team.id)
+      team,
+      form: await sports.getTeamForm(team.id)
     },
     meta: buildMeta()
   });
@@ -127,7 +119,7 @@ app.get("/live/matches/events", async (c) =>
     await stream.writeSSE({
       event: "snapshot",
       data: JSON.stringify({
-        matches: getLiveMatches(),
+        matches: await sports.listLiveMatches(),
         updatedAt: new Date().toISOString()
       })
     });
@@ -154,7 +146,7 @@ app.post("/ai/query", async (c) => {
   }
 
   return c.json({
-    data: buildMockAiAnswer(query),
+    data: await sports.answerQuery(query),
     meta: buildMeta()
   });
 });
@@ -175,7 +167,7 @@ export type ApiApp = typeof app;
 
 function buildMeta() {
   return {
-    source: "mock",
+    source: env.SPORTS_PROVIDER,
     updatedAt: new Date().toISOString()
   };
 }
@@ -186,20 +178,5 @@ function notFound(code: string, message: string) {
       code,
       message
     }
-  };
-}
-
-function buildMockAiAnswer(query: string) {
-  const liveMatches = getLiveMatches();
-  const todayMatches = getMatchList({ date: "today" });
-
-  return {
-    query,
-    answer:
-      liveMatches.length > 0
-        ? `当前有 ${liveMatches.length} 场进行中的模拟比赛。OpenScore 已基于本地 mock 数据返回结果，后续会替换为真实数据源。`
-        : `今天共有 ${todayMatches.length} 场模拟比赛。当前 AI 查询处于 grounded mock 模式，不会编造外部实时比分。`,
-    cards: todayMatches.slice(0, 3),
-    grounded: true
   };
 }
