@@ -100,6 +100,14 @@ pnpm smoke:web
 
 `pnpm smoke:web` 会启动生产构建后的 API 和 Web，API 端口为 `4101`，Web 端口为 `3100`，使用 `mock` provider、内存 repository 和内存 cache，检查首页与 `/teams/arsenal` 是否能渲染关键中文内容。运行前需要先执行 `pnpm build`。
 
+真实 provider 冒烟测试：
+
+```powershell
+pnpm smoke:provider
+```
+
+`pnpm smoke:provider` 会先读取 `.env`，在没有 `FOOTBALL_DATA_API_KEY` 时自动跳过；如果设置了 key，会启动生产构建后的 API 到端口 `4102`，使用 `football_data` provider、内存 repository 和内存 cache，检查 `/sports`、`/competitions`、`/matches/today`、`/matches?status=finished` 和 `/competitions/premier-league/standings`。运行前需要先执行 `pnpm build`。
+
 Prisma schema 验证：
 
 ```powershell
@@ -146,6 +154,7 @@ pnpm db:seed:dry-run
 - `pnpm build`
 - `pnpm smoke:api`
 - `pnpm smoke:web`
+- `pnpm smoke:provider`，当前本机无 `FOOTBALL_DATA_API_KEY` 时会 skip
 
 GitHub Actions 会在 push 和 pull request 上运行：
 
@@ -156,6 +165,7 @@ GitHub Actions 会在 push 和 pull request 上运行：
 - `pnpm build`
 - `pnpm smoke:api`
 - `pnpm smoke:web`
+- `pnpm smoke:provider`
 
 ## 5. API 快速检查
 
@@ -230,19 +240,19 @@ football-data provider 当前已标准化：
 
 ## 8. 当前限制
 
-- 默认仍使用 mock provider；football-data 适配器已实现，但本机没有真实 API key，尚未做线上数据 smoke test。
+- 默认仍使用 mock provider；football-data 适配器和可选 provider smoke 已实现，但本机没有真实 API key，尚未实跑线上数据 smoke test。
 - Docker 未准备好，当前机器还不能实测 `docker compose up --build`。
 - 当前 repository 默认是内存实现，服务重启后同步数据会丢失；PostgreSQL repository 已实现，但当前机器没有 PostgreSQL/Docker，尚未做真实数据库 smoke test。
 - AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema、首个 migration、seed dry-run 和 Compose db-init 配置已验证；真实数据库 migration/seed 因当前机器 `docker` 命令不可用尚未实测。
-- CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke，并断言 memory cache 与 memory sync lock；但还没有真实 PostgreSQL、Redis runtime、provider key 或浏览器级端到端测试。
+- CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke/provider smoke skip，并断言 memory cache 与 memory sync lock；但还没有真实 PostgreSQL、Redis runtime、provider key 或浏览器级端到端测试。
 
 ## 9. 下一步建议
 
 1. 安装 Docker Desktop 并启动 PostgreSQL/Redis
 2. 执行 `docker compose up --build`
-3. 用真实 `FOOTBALL_DATA_API_KEY` 做 provider smoke test
+3. 用真实 `FOOTBALL_DATA_API_KEY` 跑通 `pnpm smoke:provider`
 4. 将默认部署接入真实 `SPORTS_PROVIDER`
 5. 加浏览器级 Playwright smoke test
 

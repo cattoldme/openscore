@@ -133,7 +133,10 @@ pnpm typecheck
 pnpm build
 pnpm smoke:api
 pnpm smoke:web
+pnpm smoke:provider
 ```
+
+`pnpm smoke:provider` is optional: it reads `.env`, skips when `FOOTBALL_DATA_API_KEY` is not set, and validates football-data fixtures shape, finished results, and Premier League standings when a key is available.
 
 Provider configuration:
 
@@ -181,6 +184,7 @@ CI runs the same core checks on pushes and pull requests:
 - `pnpm build`
 - `pnpm smoke:api`
 - `pnpm smoke:web`
+- `pnpm smoke:provider` (skips without `FOOTBALL_DATA_API_KEY`)
 
 ## Project Principles
 
@@ -197,7 +201,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening issues or pull req
 
 ## Status
 
-OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, initial migration, seed script, memory/PostgreSQL repository implementations, memory/Redis cache and sync lock implementations, Compose database initialization, football-data provider adapter, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, initial migration, seed script, memory/PostgreSQL repository implementations, memory/Redis cache and sync lock implementations, Compose database initialization, football-data provider adapter, optional real provider smoke test, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates. Running real provider smoke still requires a `FOOTBALL_DATA_API_KEY`.
 
 See:
 

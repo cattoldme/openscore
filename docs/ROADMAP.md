@@ -66,5 +66,6 @@
 - [x] Add CI checks
 - [x] Add API smoke test
 - [x] Add Web smoke test
+- [x] Add optional provider smoke test
 - [ ] Add hosted demo
 - [ ] Publish first release tag

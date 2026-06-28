@@ -147,6 +147,7 @@ Copy-Item .env.example .env
 - 初始 Prisma migration
 - mock seed 脚本
 - GitHub Actions CI 基础门禁
+- 可选 football-data provider smoke test
 - 贡献指南、PR 模板和 issue 模板
 
 ## 7. 非交互环境提示
@@ -181,5 +182,6 @@ GitHub Actions 使用 Node.js 24 和 pnpm 11，默认 mock provider 与内存 re
 - 生产构建
 - API smoke test
 - Web smoke test
+- Provider smoke test，没有 `FOOTBALL_DATA_API_KEY` 时跳过
 
-真实数据库 migration/seed、Redis cache/lock runtime smoke、真实 provider smoke test 和浏览器级端到端测试仍需要后续补齐。
+真实数据库 migration/seed、Redis cache/lock runtime smoke、带真实 `FOOTBALL_DATA_API_KEY` 的 provider smoke test 和浏览器级端到端测试仍需要后续补齐。

@@ -62,3 +62,5 @@ jobs:
 
       - name: Web smoke test
         run: pnpm smoke:web
+      - name: Provider smoke test
+        run: pnpm smoke:provider
