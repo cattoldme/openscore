@@ -6,12 +6,16 @@
 - [x] Add README
 - [x] Add project proposal
 - [x] Add initial roadmap
-- [ ] Confirm public product scope
+- [x] Confirm public product scope
+- [x] Confirm technical stack
+- [x] Confirm first architecture baseline
 - [ ] Confirm first data provider
 
 ## Phase 1 - Prototype
 
-- [ ] Create Next.js + TypeScript app
+- [ ] Create pnpm workspace
+- [ ] Create Next.js + TypeScript web app
+- [ ] Create Hono API app
 - [ ] Add Tailwind CSS
 - [ ] Build mobile-first shell
 - [ ] Build today matches view with mock data
@@ -52,4 +56,3 @@
 - [ ] Add Docker Compose
 - [ ] Add hosted demo
 - [ ] Publish first release tag
-

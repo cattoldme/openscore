@@ -59,9 +59,11 @@ Commercial data sources can be added later, but the MVP should prove the experie
 
 ## Suggested Tech Stack
 
-- Frontend: Next.js, TypeScript, Tailwind CSS, PWA
-- Backend: Hono or NestJS
+- Monorepo: pnpm workspace
+- Frontend: Next.js App Router, React, TypeScript, Tailwind CSS, PWA
+- Backend: Hono
 - Database: PostgreSQL
+- ORM: Prisma
 - Cache: Redis
 - Realtime: Server-Sent Events first, WebSocket later if needed
 - Jobs: scheduled provider sync tasks
@@ -76,7 +78,10 @@ Commercial data sources can be added later, but the MVP should prove the experie
 ├── LICENSE
 ├── docs
 │   ├── PROJECT_PROPOSAL.md
-│   └── ROADMAP.md
+│   ├── ROADMAP.md
+│   ├── TECH_STACK.md
+│   ├── ARCHITECTURE.md
+│   └── DATA_MODEL.md
 └── .gitignore
 ```
 
@@ -95,5 +100,10 @@ Application code will be added after the product and architecture baseline is co
 
 OpenScore is at the project planning and repository bootstrapping stage.
 
-See [Project Proposal](docs/PROJECT_PROPOSAL.md) and [Roadmap](docs/ROADMAP.md).
+See:
 
+- [Project Proposal](docs/PROJECT_PROPOSAL.md)
+- [Tech Stack](docs/TECH_STACK.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Data Model](docs/DATA_MODEL.md)
+- [Roadmap](docs/ROADMAP.md)
