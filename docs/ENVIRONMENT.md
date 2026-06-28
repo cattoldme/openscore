@@ -85,8 +85,10 @@ Copy-Item .env.example .env
 | `API_BASE_URL` | 是 | API 访问地址 |
 | `NEXT_PUBLIC_API_BASE_URL` | 是 | 浏览器端调用 API 的公开地址 |
 | `DATABASE_URL` | 是 | PostgreSQL 连接串 |
+| `COMPOSE_DATABASE_URL` | 否 | Docker Compose 内部数据库连接串，默认使用 `postgres` 服务 |
 | `REDIS_URL` | 是 | Redis 连接串 |
 | `SPORTS_REPOSITORY` | 是 | 默认 `memory`，可切换为 `postgres` |
+| `COMPOSE_SPORTS_REPOSITORY` | 否 | Docker Compose repository 选择，默认 `postgres` |
 | `SPORTS_PROVIDER` | 是 | MVP 可先用 `mock` |
 | `FOOTBALL_DATA_API_KEY` | 否 | 接入 football-data.org 时填写 |
 | `FOOTBALL_DATA_BASE_URL` | 是 | 默认 `https://api.football-data.org/v4` |
@@ -134,6 +136,7 @@ Copy-Item .env.example .env
 - API 内存缓存和手动同步状态接口
 - 第一版 `Dockerfile`
 - Web/API/PostgreSQL/Redis `docker-compose.yml`
+- Docker Compose `db-init` migration/seed 服务
 - 简单部署指南：`docs/DEPLOYMENT.md`
 - Prisma schema 与 validate/generate 脚本
 - 初始 Prisma migration

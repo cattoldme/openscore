@@ -478,7 +478,7 @@ MVP 至少记录：
 当前部署已实现：
 
 - `Dockerfile`
-- `docker-compose.yml` 覆盖 Web、API、PostgreSQL、Redis
+- `docker-compose.yml` 覆盖 Web、API、PostgreSQL、Redis，并通过 `db-init` 执行 migration/seed
 - `docs/DEPLOYMENT.md` 简单自建部署指南
 - `.github/workflows/ci.yml` 基础 CI 门禁
 

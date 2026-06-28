@@ -168,6 +168,8 @@ Self-host with Docker Compose:
 docker compose up --build
 ```
 
+Docker Compose keeps local development settings separate: it defaults to PostgreSQL with `COMPOSE_SPORTS_REPOSITORY=postgres`, runs `pnpm db:migrate && pnpm db:seed` before the API starts, and does not reuse the local `DATABASE_URL=localhost` inside containers.
+
 CI runs the same core checks on pushes and pull requests:
 
 - `pnpm db:generate`
@@ -193,7 +195,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening issues or pull req
 
 ## Status
 
-OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, initial migration, seed script, memory/PostgreSQL repository implementations, football-data provider adapter, in-memory API cache, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, initial migration, seed script, memory/PostgreSQL repository implementations, Compose database initialization, football-data provider adapter, in-memory API cache, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
 
 See:
 

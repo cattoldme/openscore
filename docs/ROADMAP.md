@@ -59,6 +59,7 @@
 - [x] Add contribution guide
 - [x] Add issue templates
 - [x] Add Docker Compose
+- [x] Add Compose database initialization
 - [x] Add CI checks
 - [x] Add API smoke test
 - [x] Add Web smoke test

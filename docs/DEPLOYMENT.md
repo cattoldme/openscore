@@ -11,7 +11,7 @@ OpenScore MVP 先支持 Docker Compose 自建部署：
 - `postgres`：PostgreSQL 16，默认端口 `5432`
 - `redis`：Redis 7，默认端口 `6379`
 
-当前 API 默认使用内存 repository 和内存 cache。PostgreSQL repository 已实现，可通过 `SPORTS_REPOSITORY=postgres` 开启；Redis 已进入部署拓扑，用于后续分布式缓存和同步锁接入。
+本地开发默认使用内存 repository 和内存 cache。Docker Compose 默认使用 PostgreSQL repository，并通过 `db-init` 服务在 API 启动前执行 `pnpm db:migrate && pnpm db:seed`。Redis 已进入部署拓扑，用于后续分布式缓存和同步锁接入。
 
 ## 2. 前置要求
 
@@ -43,7 +43,14 @@ SPORTS_PROVIDER=mock
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
-使用 PostgreSQL repository 时，先执行 migration 和 seed，然后切换 repository：
+Docker Compose 会使用容器内 PostgreSQL，不读取本机开发用的 `DATABASE_URL=localhost`。如需覆盖 Compose 数据库或 repository，可设置：
+
+```env
+COMPOSE_DATABASE_URL=postgresql://openscore:openscore@postgres:5432/openscore?schema=public
+COMPOSE_SPORTS_REPOSITORY=postgres
+```
+
+如果不使用 Docker Compose，而是本机或云端 PostgreSQL，则先执行 migration 和 seed，然后切换 repository：
 
 ```powershell
 pnpm db:migrate
@@ -82,6 +89,13 @@ docker compose up --build -d
 - Web: `http://localhost:3000`
 - API: `http://localhost:4000`
 - Health: `http://localhost:4000/health`
+
+启动顺序：
+
+1. `postgres` 健康检查通过
+2. `db-init` 执行 migration 和 seed
+3. `api` 使用 PostgreSQL repository 启动
+4. `web` 等 API 健康后启动
 
 ## 5. 验证部署
 
@@ -137,8 +151,8 @@ docker compose down -v
 ## 7. 当前限制
 
 - 本机复检时 `docker` 命令不可用，因此本文的 Docker Compose 运行还未在当前机器实测。
-- PostgreSQL schema、migration、repository 和 seed dry-run 已验证到类型/构建层，但当前机器没有 PostgreSQL/Docker，尚未执行真实数据库 `pnpm db:migrate`、`pnpm db:seed` 和 smoke test。
-- 默认 `SPORTS_REPOSITORY=memory` 时，服务重启后内存 repository 数据会丢失。
+- PostgreSQL schema、migration、repository、seed dry-run 和 Compose 配置已验证到类型/构建层，但当前机器没有 PostgreSQL/Docker，尚未执行真实 Docker Compose smoke test。
+- 本地开发默认 `SPORTS_REPOSITORY=memory` 时，服务重启后内存 repository 数据会丢失；Docker Compose 默认使用 `COMPOSE_SPORTS_REPOSITORY=postgres`。
 - Redis 已在拓扑中，但 API cache 仍是内存 TTL cache。
 - football-data.org 真实数据需要 `FOOTBALL_DATA_API_KEY`。
 - AI 查询当前是确定性 grounded MVP，还没有接真实 LLM provider。

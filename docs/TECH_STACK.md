@@ -199,7 +199,7 @@ AI 查询不允许凭空回答。
 - postgres
 - redis
 
-当前仓库已提供 `Dockerfile` 和 `docker-compose.yml`。本机当前缺少 Docker 命令，因此 compose 运行验证需要在安装 Docker Desktop 后补做。
+当前仓库已提供 `Dockerfile` 和 `docker-compose.yml`。Compose 默认使用 PostgreSQL repository，并通过 `db-init` 在 API 启动前执行 migration/seed。本机当前缺少 Docker 命令，因此 compose 运行验证需要在安装 Docker Desktop 后补做。
 
 ### 9.2 Demo 部署
 

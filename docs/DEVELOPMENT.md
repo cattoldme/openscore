@@ -13,7 +13,7 @@
 - 环境变量校验：`packages/config`
 - mock 数据源和 football-data provider 适配器：`packages/providers`
 - Prisma schema 和 repository 抽象：`packages/db`
-- Dockerfile 和 Docker Compose：`Dockerfile`、`docker-compose.yml`
+- Dockerfile 和 Docker Compose：`Dockerfile`、`docker-compose.yml`，Compose 会先执行 `db-init`
 - GitHub Actions CI：`.github/workflows/ci.yml`
 - 今日比赛、积分榜、球队详情、球队状态、本地收藏、repository 读写、缓存、手动同步状态和自然语言查询的最小产品链路
 
@@ -220,15 +220,15 @@ football-data provider 当前已标准化：
 - 当前 repository 默认是内存实现，服务重启后同步数据会丢失；PostgreSQL repository 已实现，但当前机器没有 PostgreSQL/Docker，尚未做真实数据库 smoke test。
 - AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
-- Prisma schema、首个 migration 和 seed dry-run 已验证；真实数据库 migration/seed 因当前机器 `docker` 命令不可用尚未实测。
+- Prisma schema、首个 migration、seed dry-run 和 Compose db-init 配置已验证；真实数据库 migration/seed 因当前机器 `docker` 命令不可用尚未实测。
 - CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke，但还没有真实 PostgreSQL、Redis、provider key 或浏览器级端到端测试。
 
 ## 9. 下一步建议
 
 1. 安装 Docker Desktop 并启动 PostgreSQL/Redis
-2. 执行 `pnpm db:migrate` 和 `pnpm db:seed`
+2. 执行 `docker compose up --build`
 3. 用真实 `FOOTBALL_DATA_API_KEY` 做 provider smoke test
-4. 将默认部署切到 `SPORTS_REPOSITORY=postgres`
+4. 将默认部署接入真实 `SPORTS_PROVIDER`
 5. 加浏览器级 Playwright smoke test
 
 部署说明见 [Deployment](DEPLOYMENT.md)。

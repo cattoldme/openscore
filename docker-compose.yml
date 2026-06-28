@@ -1,4 +1,16 @@
 services:
+  db-init:
+    build:
+      context: .
+    container_name: openscore-db-init
+    restart: "no"
+    command: ["sh", "-c", "pnpm db:migrate && pnpm db:seed"]
+    environment:
+      DATABASE_URL: ${COMPOSE_DATABASE_URL:-postgresql://openscore:openscore@postgres:5432/openscore?schema=public}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   api:
     build:
       context: .
@@ -9,9 +21,9 @@ services:
       NODE_ENV: production
       WEB_PUBLIC_BASE_URL: ${WEB_PUBLIC_BASE_URL:-http://localhost:3000}
       API_BASE_URL: ${API_BASE_URL:-http://localhost:4000}
-      DATABASE_URL: ${DATABASE_URL:-postgresql://openscore:openscore@postgres:5432/openscore?schema=public}
+      DATABASE_URL: ${COMPOSE_DATABASE_URL:-postgresql://openscore:openscore@postgres:5432/openscore?schema=public}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      SPORTS_REPOSITORY: ${SPORTS_REPOSITORY:-memory}
+      SPORTS_REPOSITORY: ${COMPOSE_SPORTS_REPOSITORY:-postgres}
       SPORTS_PROVIDER: ${SPORTS_PROVIDER:-mock}
       FOOTBALL_DATA_API_KEY: ${FOOTBALL_DATA_API_KEY:-}
       FOOTBALL_DATA_BASE_URL: ${FOOTBALL_DATA_BASE_URL:-https://api.football-data.org/v4}
@@ -27,8 +39,8 @@ services:
     ports:
       - "4000:4000"
     depends_on:
-      postgres:
-        condition: service_healthy
+      db-init:
+        condition: service_completed_successfully
       redis:
         condition: service_healthy
     healthcheck:

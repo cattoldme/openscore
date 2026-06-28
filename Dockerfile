@@ -20,4 +20,4 @@ RUN pnpm build
 
 ENV NODE_ENV=production
 
-CMD ["pnpm", "dev"]
+CMD ["pnpm", "--filter", "@openscore/api", "start"]
