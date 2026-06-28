@@ -15,6 +15,9 @@
     "db:format": "pnpm --filter @openscore/db db:format",
     "db:validate": "pnpm --filter @openscore/db db:validate",
     "db:generate": "pnpm --filter @openscore/db db:generate",
+    "db:migrate": "pnpm --filter @openscore/db db:migrate",
+    "db:seed": "pnpm --filter @openscore/db db:seed",
+    "db:seed:dry-run": "pnpm --filter @openscore/db db:seed:dry-run",
     "db:push": "pnpm --filter @openscore/db db:push"
   },
   "devDependencies": {

@@ -151,6 +151,8 @@ flowchart LR
 - `SportsRepository` 接口
 - `createInMemorySportsRepository()`，用于 Docker/PostgreSQL 尚未准备好时的本地同步和查询验证
 - `createPrismaSportsRepository()`，通过 Prisma 7 driver adapter 接入 PostgreSQL
+- 初始 migration：`packages/db/prisma/migrations/20260629182000_init/migration.sql`
+- mock seed：`pnpm db:seed`
 
 ### 4.5 packages/providers
 

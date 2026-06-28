@@ -13,6 +13,9 @@
     "db:format": "prisma format --config prisma.config.ts",
     "db:validate": "prisma validate --config prisma.config.ts",
     "db:generate": "prisma generate --config prisma.config.ts",
+    "db:migrate": "prisma migrate deploy --config prisma.config.ts",
+    "db:seed": "node prisma/seed.mjs",
+    "db:seed:dry-run": "node prisma/seed.mjs --dry-run",
     "db:push": "prisma db push --config prisma.config.ts"
   },
   "dependencies": {

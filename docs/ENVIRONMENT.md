@@ -136,6 +136,8 @@ Copy-Item .env.example .env
 - Web/API/PostgreSQL/Redis `docker-compose.yml`
 - 简单部署指南：`docs/DEPLOYMENT.md`
 - Prisma schema 与 validate/generate 脚本
+- 初始 Prisma migration
+- mock seed 脚本
 - GitHub Actions CI 基础门禁
 - 贡献指南、PR 模板和 issue 模板
 
@@ -166,9 +168,10 @@ GitHub Actions 使用 Node.js 24 和 pnpm 11，默认 mock provider 与内存 re
 - 依赖安装
 - Prisma Client 生成
 - Prisma schema 校验
+- Seed payload dry-run
 - TypeScript 类型检查
 - 生产构建
 - API smoke test
 - Web smoke test
 
-真实数据库迁移、Redis cache、真实 provider smoke test 和浏览器级端到端测试仍需要后续补齐。
+真实数据库 migration/seed、Redis cache、真实 provider smoke test 和浏览器级端到端测试仍需要后续补齐。

@@ -116,11 +116,30 @@ pnpm db:generate
 pnpm db:push
 ```
 
+执行已提交的 migration：
+
+```powershell
+pnpm db:migrate
+```
+
+写入 mock seed 数据：
+
+```powershell
+pnpm db:seed
+```
+
+无数据库环境下校验 seed payload：
+
+```powershell
+pnpm db:seed:dry-run
+```
+
 当前已验证：
 
 - `pnpm install`
 - `pnpm db:validate`
 - `pnpm db:generate`
+- `pnpm db:seed:dry-run`
 - `pnpm typecheck`
 - `pnpm build`
 - `pnpm smoke:api`
@@ -130,6 +149,7 @@ GitHub Actions 会在 push 和 pull request 上运行：
 
 - `pnpm db:generate`
 - `pnpm db:validate`
+- `pnpm db:seed:dry-run`
 - `pnpm typecheck`
 - `pnpm build`
 - `pnpm smoke:api`
@@ -200,13 +220,13 @@ football-data provider 当前已标准化：
 - 当前 repository 默认是内存实现，服务重启后同步数据会丢失；PostgreSQL repository 已实现，但当前机器没有 PostgreSQL/Docker，尚未做真实数据库 smoke test。
 - AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
-- Prisma schema 已验证，但未执行真实数据库 migration，因为当前机器 `docker` 命令不可用。
+- Prisma schema、首个 migration 和 seed dry-run 已验证；真实数据库 migration/seed 因当前机器 `docker` 命令不可用尚未实测。
 - CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke，但还没有真实 PostgreSQL、Redis、provider key 或浏览器级端到端测试。
 
 ## 9. 下一步建议
 
 1. 安装 Docker Desktop 并启动 PostgreSQL/Redis
-2. 执行 `pnpm db:push`
+2. 执行 `pnpm db:migrate` 和 `pnpm db:seed`
 3. 用真实 `FOOTBALL_DATA_API_KEY` 做 provider smoke test
 4. 将默认部署切到 `SPORTS_REPOSITORY=postgres`
 5. 加浏览器级 Playwright smoke test

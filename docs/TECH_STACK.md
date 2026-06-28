@@ -135,6 +135,9 @@ API 不把外部 provider 的原始结构直接暴露给前端。
 - config: `packages/db/prisma.config.ts`
 - validate: `pnpm db:validate`
 - generate: `pnpm db:generate`
+- migrate: `pnpm db:migrate`
+- seed: `pnpm db:seed`
+- seed dry-run: `pnpm db:seed:dry-run`
 
 Prisma 7 不再把连接串写在 schema 的 `datasource.url` 中，连接串由 `prisma.config.ts` 读取 `DATABASE_URL`。
 

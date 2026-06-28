@@ -43,10 +43,11 @@ SPORTS_PROVIDER=mock
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
-使用 PostgreSQL repository 时，先推送 schema，然后切换 repository：
+使用 PostgreSQL repository 时，先执行 migration 和 seed，然后切换 repository：
 
 ```powershell
-pnpm db:push
+pnpm db:migrate
+pnpm db:seed
 ```
 
 ```env
@@ -136,7 +137,7 @@ docker compose down -v
 ## 7. 当前限制
 
 - 本机复检时 `docker` 命令不可用，因此本文的 Docker Compose 运行还未在当前机器实测。
-- PostgreSQL schema 和 repository 代码已验证到类型/构建层，但当前机器没有 PostgreSQL/Docker，尚未执行 `pnpm db:push` 和真实数据库 smoke test。
+- PostgreSQL schema、migration、repository 和 seed dry-run 已验证到类型/构建层，但当前机器没有 PostgreSQL/Docker，尚未执行真实数据库 `pnpm db:migrate`、`pnpm db:seed` 和 smoke test。
 - 默认 `SPORTS_REPOSITORY=memory` 时，服务重启后内存 repository 数据会丢失。
 - Redis 已在拓扑中，但 API cache 仍是内存 TTL cache。
 - football-data.org 真实数据需要 `FOOTBALL_DATA_API_KEY`。
@@ -146,7 +147,6 @@ docker compose down -v
 
 下一步：
 
-1. 添加 migration/seed 执行流程
-2. 把 Redis 接入 cache 和 sync lock
-3. 拆分生产 Dockerfile，减小镜像体积
-4. 添加镜像发布流程
+1. 把 Redis 接入 cache 和 sync lock
+2. 拆分生产 Dockerfile，减小镜像体积
+3. 添加镜像发布流程

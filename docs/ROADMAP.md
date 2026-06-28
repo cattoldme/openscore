@@ -30,6 +30,8 @@
 - [x] Implement provider adapter interface
 - [x] Add first football data provider
 - [x] Add PostgreSQL schema
+- [x] Add initial database migration
+- [x] Add seed command
 - [x] Add repository abstraction
 - [x] Add PostgreSQL repository implementation
 - [x] Add sync jobs

@@ -6,6 +6,7 @@
 
 - [ ] `pnpm db:validate`
 - [ ] `pnpm db:generate`
+- [ ] `pnpm db:seed:dry-run`
 - [ ] `pnpm typecheck`
 - [ ] `pnpm build`
 - [ ] `pnpm smoke:api`

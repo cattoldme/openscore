@@ -47,6 +47,9 @@ jobs:
       - name: Validate Prisma schema
         run: pnpm db:validate
 
+      - name: Validate seed payload
+        run: pnpm db:seed:dry-run
+
       - name: Typecheck
         run: pnpm typecheck
 

@@ -128,6 +128,7 @@ Verify:
 ```bash
 pnpm db:validate
 pnpm db:generate
+pnpm db:seed:dry-run
 pnpm typecheck
 pnpm build
 pnpm smoke:api
@@ -155,6 +156,9 @@ Database helpers:
 ```bash
 pnpm db:validate
 pnpm db:generate
+pnpm db:migrate
+pnpm db:seed
+pnpm db:seed:dry-run
 pnpm db:push
 ```
 
@@ -168,6 +172,7 @@ CI runs the same core checks on pushes and pull requests:
 
 - `pnpm db:generate`
 - `pnpm db:validate`
+- `pnpm db:seed:dry-run`
 - `pnpm typecheck`
 - `pnpm build`
 - `pnpm smoke:api`
@@ -188,7 +193,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening issues or pull req
 
 ## Status
 
-OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, memory/PostgreSQL repository implementations, football-data provider adapter, in-memory API cache, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, initial migration, seed script, memory/PostgreSQL repository implementations, football-data provider adapter, in-memory API cache, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
 
 See:
 
