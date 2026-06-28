@@ -146,15 +146,19 @@ function toKeyList(chunk: string | string[]): string[] {
   return Array.isArray(chunk) ? chunk : [chunk];
 }
 
-export async function createRedisCache(redisUrl: string): Promise<RedisCache> {
+export async function createRedisClient(redisUrl: string): Promise<RedisClientType> {
   const client = createClient({
     url: redisUrl
   });
 
   client.on("error", (error) => {
-    console.error("Redis cache error", error);
+    console.error("Redis error", error);
   });
 
   await client.connect();
-  return new RedisCache(client as RedisClientType);
+  return client as RedisClientType;
+}
+
+export async function createRedisCache(redisUrl: string): Promise<RedisCache> {
+  return new RedisCache(await createRedisClient(redisUrl));
 }

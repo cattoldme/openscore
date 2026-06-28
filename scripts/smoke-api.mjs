@@ -99,6 +99,7 @@ async function assertSyncStatus() {
   assert(body.data?.repository?.standings >= 6, "Expected repository standings count.");
   assert(body.data?.repository?.teams >= 6, "Expected repository teams count.");
   assert(body.data?.cache?.provider === "memory", "Expected memory cache provider.");
+  assert(body.data?.sync?.lock?.provider === "memory", "Expected memory sync lock provider.");
 }
 
 async function assertMatches() {

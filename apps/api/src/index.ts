@@ -5,8 +5,9 @@ import { streamSSE } from "hono/streaming";
 import { loadServerEnv } from "@openscore/config";
 import { createInMemorySportsRepository, createPrismaClient, createPrismaSportsRepository } from "@openscore/db";
 import { createSyncRunner } from "./jobs/sync-jobs";
-import { createRedisCache, TtlCache } from "./services/cache";
+import { createRedisClient, RedisCache, TtlCache, type CacheStore } from "./services/cache";
 import { createSportsService } from "./services/sports-service";
+import { MemorySyncLock, RedisSyncLock, type SyncLock } from "./services/sync-lock";
 
 const env = loadServerEnv();
 const app = new Hono();
@@ -15,7 +16,18 @@ const repository =
   env.SPORTS_REPOSITORY === "postgres"
     ? createPrismaSportsRepository(createPrismaClient(env.DATABASE_URL))
     : createInMemorySportsRepository();
-const cache = env.CACHE_PROVIDER === "redis" ? await createRedisCache(env.REDIS_URL) : new TtlCache();
+let cache: CacheStore;
+let syncLock: SyncLock;
+
+if (env.CACHE_PROVIDER === "redis") {
+  const redisClient = await createRedisClient(env.REDIS_URL);
+  cache = new RedisCache(redisClient);
+  syncLock = new RedisSyncLock(redisClient);
+} else {
+  cache = new TtlCache();
+  syncLock = new MemorySyncLock();
+}
+
 const sports = createSportsService(env.SPORTS_PROVIDER, {
   repository,
   cache,
@@ -25,7 +37,9 @@ const sports = createSportsService(env.SPORTS_PROVIDER, {
     competitionCodes: parseList(env.FOOTBALL_DATA_COMPETITIONS)
   }
 });
-const syncRunner = createSyncRunner(sports.provider, sports.repository);
+const syncRunner = createSyncRunner(sports.provider, sports.repository, {
+  lock: syncLock
+});
 
 app.use(
   "*",
@@ -64,12 +78,13 @@ app.get("/sync/status", async (c) =>
 );
 
 app.post("/sync/run", async (c) => {
-  await sports.clearCache();
+  const sync = await syncRunner.runNow();
 
-  return c.json({
-    data: await syncRunner.runNow(),
-    meta: buildMeta()
-  });
+  if (sync.status === "succeeded") {
+    await sports.clearCache();
+  }
+
+  return c.json({ data: sync, meta: buildMeta() });
 });
 
 app.get("/competitions/:id/standings", async (c) => {

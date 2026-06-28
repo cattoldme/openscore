@@ -137,6 +137,7 @@ Copy-Item .env.example .env
 - football-data provider 适配器
 - 内存 repository 和 PostgreSQL repository
 - 内存 cache 和 Redis cache adapter
+- 内存 sync lock 和 Redis sync lock
 - API cache 状态和手动同步状态接口
 - 第一版 `Dockerfile`
 - Web/API/PostgreSQL/Redis `docker-compose.yml`
@@ -181,4 +182,4 @@ GitHub Actions 使用 Node.js 24 和 pnpm 11，默认 mock provider 与内存 re
 - API smoke test
 - Web smoke test
 
-真实数据库 migration/seed、Redis runtime smoke、真实 provider smoke test 和浏览器级端到端测试仍需要后续补齐。
+真实数据库 migration/seed、Redis cache/lock runtime smoke、真实 provider smoke test 和浏览器级端到端测试仍需要后续补齐。

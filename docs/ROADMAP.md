@@ -37,6 +37,7 @@
 - [x] Add sync jobs
 - [x] Add cache strategy
 - [x] Add Redis cache adapter
+- [x] Add Redis sync lock
 
 ## Phase 3 - MVP
 

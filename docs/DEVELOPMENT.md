@@ -14,6 +14,7 @@
 - mock 数据源和 football-data provider 适配器：`packages/providers`
 - Prisma schema 和 repository 抽象：`packages/db`
 - 内存 cache 和 Redis cache adapter
+- 内存 sync lock 和 Redis sync lock
 - Dockerfile 和 Docker Compose：`Dockerfile`、`docker-compose.yml`，Compose 会先执行 `db-init`
 - GitHub Actions CI：`.github/workflows/ci.yml`
 - 今日比赛、积分榜、球队详情、球队状态、本地收藏、repository 读写、缓存、手动同步状态和自然语言查询的最小产品链路
@@ -168,7 +169,7 @@ Invoke-RestMethod -Method Post http://localhost:4000/sync/run
 Invoke-RestMethod -Method Post http://localhost:4000/ai/query -ContentType 'application/json' -Body '{"query":"阿森纳最近状态怎么样？"}'
 ```
 
-`POST /sync/run` 会从当前 provider 拉取 sports、competitions、today fixtures 和 `premier-league` standings，并写入当前 repository。`GET /sync/status` 会返回 sync、repository 和 cache 三块状态，方便确认 API 当前读的是本地数据层还是 provider fallback。
+`POST /sync/run` 会先获取 sync lock，再从当前 provider 拉取 sports、competitions、today fixtures 和 `premier-league` standings，并写入当前 repository。`GET /sync/status` 会返回 sync、repository 和 cache 三块状态，方便确认 API 当前读的是本地数据层还是 provider fallback，以及同步锁使用的是 memory 还是 Redis。
 
 `POST /ai/query` 当前是确定性 grounded MVP：API 会先检索今日比赛、进行中比赛和积分榜，再按简单意图路由生成中文回答，并返回相关比赛卡片、数据源和更新时间。
 
@@ -235,7 +236,7 @@ football-data provider 当前已标准化：
 - AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema、首个 migration、seed dry-run 和 Compose db-init 配置已验证；真实数据库 migration/seed 因当前机器 `docker` 命令不可用尚未实测。
-- CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke，但还没有真实 PostgreSQL、Redis runtime、provider key 或浏览器级端到端测试。
+- CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke，并断言 memory cache 与 memory sync lock；但还没有真实 PostgreSQL、Redis runtime、provider key 或浏览器级端到端测试。
 
 ## 9. 下一步建议
 
