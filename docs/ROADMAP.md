@@ -41,7 +41,7 @@
 - [ ] Show real standings
 - [x] Show team recent form
 - [x] Add PWA manifest
-- [ ] Add simple deployment guide
+- [x] Add simple deployment guide
 
 ## Phase 4 - AI Query
 

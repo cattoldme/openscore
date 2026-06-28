@@ -1,7 +1,7 @@
 import type { ProviderCode } from "@openscore/domain";
-import { createFootballDataProvider } from "./football-data";
-import { createMockProvider } from "./mock";
-import type { SportsDataProvider, SportsDataProviderOptions } from "./types";
+import { createFootballDataProvider } from "./football-data.ts";
+import { createMockProvider } from "./mock.ts";
+import type { SportsDataProvider, SportsDataProviderOptions } from "./types.ts";
 
 export type {
   AiQueryResult,
@@ -11,7 +11,7 @@ export type {
   SportsDataProviderOptions,
   StandingQuery,
   TeamQuery
-} from "./types";
+} from "./types.ts";
 export {
   findCompetitionById,
   findMatchById,
@@ -25,7 +25,7 @@ export {
   mockSports,
   mockStandings,
   mockTeams
-} from "./mock";
+} from "./mock.ts";
 
 export function createSportsDataProvider(
   code: ProviderCode = "mock",

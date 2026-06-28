@@ -91,8 +91,11 @@ Commercial data sources can be added later, but the MVP should prove the experie
 │   ├── TECH_STACK.md
 │   ├── ARCHITECTURE.md
 │   ├── DATA_MODEL.md
+│   ├── DEPLOYMENT.md
 │   ├── ENVIRONMENT.md
 │   └── DEVELOPMENT.md
+├── Dockerfile
+├── docker-compose.yml
 └── .gitignore
 ```
 
@@ -142,6 +145,12 @@ pnpm db:validate
 pnpm db:generate
 ```
 
+Self-host with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
 ## Project Principles
 
 - Keep the interface fast and quiet.
@@ -161,6 +170,7 @@ See:
 - [Tech Stack](docs/TECH_STACK.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Data Model](docs/DATA_MODEL.md)
+- [Deployment](docs/DEPLOYMENT.md)
 - [Environment](docs/ENVIRONMENT.md)
 - [Development](docs/DEVELOPMENT.md)
 - [Roadmap](docs/ROADMAP.md)

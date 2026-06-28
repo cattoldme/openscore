@@ -131,7 +131,9 @@ Copy-Item .env.example .env
 - mock provider
 - football-data provider 适配器
 - API 内存缓存和手动同步状态接口
-- 第一版 `docker-compose.yml`
+- 第一版 `Dockerfile`
+- Web/API/PostgreSQL/Redis `docker-compose.yml`
+- 简单部署指南：`docs/DEPLOYMENT.md`
 - Prisma schema 与 validate/generate 脚本
 
 ## 7. 非交互环境提示

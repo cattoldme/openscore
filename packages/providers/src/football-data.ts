@@ -1,5 +1,5 @@
 import type { Competition, MatchStatus, MatchSummary, Sport, StandingRow, Team } from "@openscore/domain";
-import type { FootballDataProviderOptions, SportsDataProvider } from "./types";
+import type { FootballDataProviderOptions, SportsDataProvider } from "./types.ts";
 
 const DEFAULT_BASE_URL = "https://api.football-data.org/v4";
 const DEFAULT_COMPETITIONS = ["PL"];

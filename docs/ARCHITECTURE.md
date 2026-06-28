@@ -471,3 +471,9 @@ MVP 至少记录：
 - 内存 TTL cache
 - 手动同步任务状态：`GET /sync/status`、`POST /sync/run`
 - 确定性 AI 查询 MVP：`POST /ai/query`
+
+当前部署已实现：
+
+- `Dockerfile`
+- `docker-compose.yml` 覆盖 Web、API、PostgreSQL、Redis
+- `docs/DEPLOYMENT.md` 简单自建部署指南

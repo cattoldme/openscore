@@ -1,5 +1,5 @@
 import type { Competition, MatchStatus, MatchSummary, Sport, StandingRow, Team } from "@openscore/domain";
-import type { SportsDataProvider } from "./types";
+import type { SportsDataProvider } from "./types.ts";
 
 export const mockSports: Sport[] = [
   {
@@ -199,4 +199,3 @@ function requiredTeam(id: string): Team {
 
   return team;
 }
-
