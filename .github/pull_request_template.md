@@ -8,6 +8,7 @@
 - [ ] `pnpm db:generate`
 - [ ] `pnpm typecheck`
 - [ ] `pnpm build`
+- [ ] `pnpm smoke:api`
 
 ## Data and product safety
 

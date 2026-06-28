@@ -8,6 +8,7 @@
     "dev:web": "pnpm --filter @openscore/web dev",
     "dev:api": "pnpm --filter @openscore/api dev",
     "build": "pnpm -r build",
+    "smoke:api": "node scripts/smoke-api.mjs",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",
     "db:format": "pnpm --filter @openscore/db db:format",

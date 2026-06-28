@@ -168,5 +168,6 @@ GitHub Actions 使用 Node.js 24 和 pnpm 11，默认 mock provider 与内存 re
 - Prisma schema 校验
 - TypeScript 类型检查
 - 生产构建
+- API smoke test
 
 真实数据库迁移、Redis cache、真实 provider smoke test 和浏览器级端到端测试仍需要后续补齐。

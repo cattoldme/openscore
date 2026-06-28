@@ -130,6 +130,7 @@ pnpm db:validate
 pnpm db:generate
 pnpm typecheck
 pnpm build
+pnpm smoke:api
 ```
 
 Provider configuration:
@@ -168,6 +169,7 @@ CI runs the same core checks on pushes and pull requests:
 - `pnpm db:validate`
 - `pnpm typecheck`
 - `pnpm build`
+- `pnpm smoke:api`
 
 ## Project Principles
 

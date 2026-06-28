@@ -9,6 +9,7 @@ import { createSportsService } from "./services/sports-service";
 
 const env = loadServerEnv();
 const app = new Hono();
+const smokeShutdownToken = process.env.OPEN_SCORE_SMOKE_SHUTDOWN_TOKEN;
 const repository =
   env.SPORTS_REPOSITORY === "postgres"
     ? createPrismaSportsRepository(createPrismaClient(env.DATABASE_URL))
@@ -184,6 +185,31 @@ app.post("/ai/query", async (c) => {
     meta: buildMeta()
   });
 });
+
+if (smokeShutdownToken) {
+  app.post("/__smoke/shutdown", async (c) => {
+    const body = await c.req.json().catch(() => undefined);
+    const token =
+      typeof body === "object" && body !== null && "token" in body && typeof body.token === "string"
+        ? body.token
+        : "";
+
+    if (token !== smokeShutdownToken) {
+      return c.json(
+        {
+          error: {
+            code: "FORBIDDEN",
+            message: "Invalid smoke shutdown token."
+          }
+        },
+        403
+      );
+    }
+
+    setTimeout(() => process.exit(0), 50);
+    return c.json({ data: { ok: true }, meta: buildMeta() });
+  });
+}
 
 const port = Number.parseInt(new URL(env.API_BASE_URL).port || "4000", 10);
 
