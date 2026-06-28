@@ -23,6 +23,9 @@ importers:
       '@openscore/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@openscore/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@openscore/domain':
         specifier: workspace:*
         version: link:../../packages/domain
@@ -79,6 +82,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@openscore/domain':
+        specifier: workspace:*
+        version: link:../domain
       '@prisma/client':
         specifier: ^7.0.0
         version: 7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@5.9.2))(typescript@5.9.2)

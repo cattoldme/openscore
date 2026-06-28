@@ -15,6 +15,7 @@
     "db:generate": "prisma generate --config prisma.config.ts"
   },
   "dependencies": {
+    "@openscore/domain": "workspace:*",
     "@prisma/client": "^7.0.0"
   },
   "devDependencies": {

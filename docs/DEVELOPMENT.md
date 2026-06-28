@@ -12,9 +12,9 @@
 - 共享领域模型：`packages/domain`
 - 环境变量校验：`packages/config`
 - mock 数据源和 football-data provider 适配器：`packages/providers`
-- Prisma schema：`packages/db/prisma/schema.prisma`
+- Prisma schema 和 repository 抽象：`packages/db`
 - Docker Compose：`docker-compose.yml`
-- 今日比赛、积分榜、球队详情、球队状态、本地收藏、缓存和手动同步状态的最小产品链路
+- 今日比赛、积分榜、球队详情、球队状态、本地收藏、repository 读写、缓存和手动同步状态的最小产品链路
 
 ## 2. 安装依赖
 
@@ -112,6 +112,8 @@ Invoke-RestMethod http://localhost:4000/sync/status
 Invoke-RestMethod -Method Post http://localhost:4000/sync/run
 ```
 
+`POST /sync/run` 会从当前 provider 拉取 sports、competitions、today fixtures 和 `premier-league` standings，并写入当前 repository。`GET /sync/status` 会返回 sync、repository 和 cache 三块状态，方便确认 API 当前读的是本地数据层还是 provider fallback。
+
 Web 快速检查：
 
 ```powershell
@@ -158,6 +160,7 @@ football-data provider 当前已标准化：
 
 - 默认仍使用 mock provider；football-data 适配器已实现，但本机没有真实 API key，尚未做线上数据 smoke test。
 - Docker 未准备好，PostgreSQL/Redis 还没有本地容器环境。
+- 当前 repository 默认是内存实现，服务重启后同步数据会丢失；PostgreSQL repository 等 Docker/数据库环境准备后接入。
 - AI 查询入口在 API 中已有占位实现，但尚未接真实模型。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema 已验证，但未执行真实数据库 migration，因为当前机器 `docker` 命令不可用。
@@ -167,5 +170,5 @@ football-data provider 当前已标准化：
 1. 安装 Docker Desktop 并启动 PostgreSQL/Redis
 2. 执行第一版 migration
 3. 用真实 `FOOTBALL_DATA_API_KEY` 做 provider smoke test
-4. 把同步结果落到 repository 接口后面
+4. 实现 PostgreSQL repository
 5. 加 Playwright smoke test

@@ -12,6 +12,7 @@
   "dependencies": {
     "@hono/node-server": "^1.19.0",
     "@openscore/config": "workspace:*",
+    "@openscore/db": "workspace:*",
     "@openscore/domain": "workspace:*",
     "@openscore/providers": "workspace:*",
     "hono": "^4.10.0"

@@ -146,6 +146,11 @@ flowchart LR
 - repository 返回 domain model 或 DTO
 - 不向上层暴露 Prisma 原始复杂查询细节
 
+当前已实现：
+
+- `SportsRepository` 接口
+- `createInMemorySportsRepository()`，用于 Docker/PostgreSQL 尚未准备好时的本地同步和查询验证
+
 ### 4.5 packages/providers
 
 职责：
@@ -191,7 +196,7 @@ sequenceDiagram
 
   Job->>Provider: fetchFixtures(dateRange)
   Provider-->>Job: normalized fixtures
-  Job->>DB: upsert matches/teams/competitions
+  Job->>DB: upsert matches/teams/competitions/standings
   Job->>Cache: invalidate today fixtures cache
 ```
 
@@ -459,5 +464,6 @@ MVP 至少记录：
 当前 API 已实现：
 
 - mock provider 和 football-data provider 选择
+- repository 读写抽象和内存 repository
 - 内存 TTL cache
 - 手动同步任务状态：`GET /sync/status`、`POST /sync/run`

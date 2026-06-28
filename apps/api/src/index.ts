@@ -15,7 +15,7 @@ const sports = createSportsService(env.SPORTS_PROVIDER, {
     competitionCodes: parseList(env.FOOTBALL_DATA_COMPETITIONS)
   }
 });
-const syncRunner = createSyncRunner(sports.provider);
+const syncRunner = createSyncRunner(sports.provider, sports.repository);
 
 app.use(
   "*",
@@ -46,6 +46,7 @@ app.get("/sync/status", (c) =>
   c.json({
     data: {
       sync: syncRunner.getSnapshot(),
+      repository: sports.getRepositorySnapshot(),
       cache: sports.getCacheSnapshot()
     },
     meta: buildMeta()

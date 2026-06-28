@@ -152,7 +152,7 @@ pnpm db:generate
 
 ## Status
 
-OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, football-data provider adapter, in-memory API cache, and manual sync status endpoints. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, repository abstraction, football-data provider adapter, in-memory API cache, and manual sync status endpoints. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
 
 See:
 

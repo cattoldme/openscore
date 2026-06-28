@@ -30,6 +30,7 @@
 - [x] Implement provider adapter interface
 - [x] Add first football data provider
 - [x] Add PostgreSQL schema
+- [x] Add repository abstraction
 - [x] Add sync jobs
 - [x] Add cache strategy
 

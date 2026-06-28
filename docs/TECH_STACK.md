@@ -1,6 +1,6 @@
 # OpenScore 技术选型
 
-更新时间：2026-06-28
+更新时间：2026-06-29
 
 ## 1. 选型结论
 
@@ -127,6 +127,8 @@ API 不把外部 provider 的原始结构直接暴露给前端。
 
 数据库访问必须通过 repository/service 层，避免页面或 route handler 直接散落 Prisma 查询。
 
+当前已实现 `SportsRepository` 接口和内存 repository，用来在 Docker/PostgreSQL 未准备好时验证同步写入、API 查询和缓存行为。后续 PostgreSQL repository 需要实现同一接口。
+
 当前采用 Prisma 7：
 
 - schema: `packages/db/prisma/schema.prisma`
@@ -147,6 +149,8 @@ Redis 用于：
 - SSE fanout 的轻量状态
 
 缓存不是事实来源，PostgreSQL 才是主数据源。
+
+当前 API 已实现内存 TTL cache。它只作为 Redis 前的 MVP fallback，不作为跨实例缓存方案。
 
 ## 7. 实时方案
 
