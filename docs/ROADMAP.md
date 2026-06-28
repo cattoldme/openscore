@@ -21,7 +21,7 @@
 - [x] Build mobile-first shell
 - [x] Build today matches view with mock data
 - [x] Build league standings view with mock data
-- [ ] Build team detail view with mock data
+- [x] Build team detail view with mock data
 - [x] Add local favorites
 
 ## Phase 2 - Data Layer
@@ -38,7 +38,7 @@
 - [ ] Show real fixtures
 - [ ] Show real results
 - [ ] Show real standings
-- [ ] Show team recent form
+- [x] Show team recent form
 - [x] Add PWA manifest
 - [ ] Add simple deployment guide
 

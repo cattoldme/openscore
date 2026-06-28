@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { MatchSummary } from "@openscore/domain";
 import { getMatchStatusLabel } from "@openscore/domain";
@@ -57,8 +58,18 @@ export function ScoreCard({ match }: { match: MatchSummary }) {
           </span>
         </div>
         <div className="grid gap-1">
-          <TeamLine name={match.homeTeamName} score={match.homeScore} highlight={match.homeScore > match.awayScore} />
-          <TeamLine name={match.awayTeamName} score={match.awayScore} highlight={match.awayScore > match.homeScore} />
+          <TeamLine
+            href={`/teams/${match.homeTeamId}`}
+            name={match.homeTeamName}
+            score={match.homeScore}
+            highlight={match.homeScore > match.awayScore}
+          />
+          <TeamLine
+            href={`/teams/${match.awayTeamId}`}
+            name={match.awayTeamName}
+            score={match.awayScore}
+            highlight={match.awayScore > match.homeScore}
+          />
         </div>
       </div>
 
@@ -70,21 +81,24 @@ export function ScoreCard({ match }: { match: MatchSummary }) {
 }
 
 function TeamLine({
+  href,
   highlight,
   name,
   score
 }: {
+  href: string;
   highlight: boolean;
   name: string;
   score: number;
 }) {
   return (
     <div className="grid grid-cols-[1fr_auto] gap-3">
-      <span className={`truncate ${highlight ? "font-bold text-ink" : "text-slate-700"}`}>{name}</span>
+      <Link className={`truncate hover:text-grass ${highlight ? "font-bold text-ink" : "text-slate-700"}`} href={href}>
+        {name}
+      </Link>
       <span className={`w-8 text-right tabular-nums ${highlight ? "font-black text-ink" : "text-slate-600"}`}>
         {score}
       </span>
     </div>
   );
 }
-

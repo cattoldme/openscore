@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ScoreCard } from "../components/score-card";
 import { StandingsTable } from "../components/standings-table";
 import { getHomeData } from "../lib/api";
@@ -54,7 +55,11 @@ export default async function HomePage() {
             <h2 className="mb-3 text-xl font-bold text-ink">球队状态</h2>
             <div className="grid gap-3">
               {home.teamForms.map((team) => (
-                <div key={team.id} className="flex items-center justify-between rounded-md bg-slate-50 p-3">
+                <Link
+                  key={team.id}
+                  className="flex items-center justify-between rounded-md bg-slate-50 p-3 transition hover:bg-emerald-50"
+                  href={`/teams/${team.id}`}
+                >
                   <div>
                     <p className="font-semibold text-ink">{team.name}</p>
                     <p className="text-xs text-slate-500">{team.competition}</p>
@@ -75,7 +80,7 @@ export default async function HomePage() {
                       </span>
                     ))}
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </section>
@@ -101,4 +106,3 @@ function Metric({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-

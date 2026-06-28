@@ -14,7 +14,7 @@
 - mock 数据源：`packages/providers`
 - Prisma schema：`packages/db/prisma/schema.prisma`
 - Docker Compose：`docker-compose.yml`
-- 今日比赛、积分榜、球队状态和本地收藏的最小产品链路
+- 今日比赛、积分榜、球队详情、球队状态和本地收藏的最小产品链路
 
 ## 2. 安装依赖
 
@@ -107,6 +107,14 @@ pnpm db:generate
 Invoke-RestMethod http://localhost:4000/health
 Invoke-RestMethod http://localhost:4000/matches/today
 Invoke-RestMethod http://localhost:4000/competitions/premier-league/standings
+Invoke-RestMethod http://localhost:4000/teams/arsenal
+```
+
+Web 快速检查：
+
+```powershell
+Invoke-WebRequest http://localhost:3000 -UseBasicParsing
+Invoke-WebRequest http://localhost:3000/teams/arsenal -UseBasicParsing
 ```
 
 ## 6. 中文路径注意事项
