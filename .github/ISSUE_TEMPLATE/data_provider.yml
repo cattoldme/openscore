@@ -1,0 +1,46 @@
+name: Data provider integration
+description: Propose or track a sports data provider adapter.
+title: "provider: "
+labels:
+  - provider
+body:
+  - type: input
+    id: provider
+    attributes:
+      label: Provider name
+      placeholder: football-data.org, TheSportsDB, OpenLigaDB...
+    validations:
+      required: true
+  - type: textarea
+    id: coverage
+    attributes:
+      label: Coverage
+      description: Sports, leagues, fixtures, live scores, standings, teams, and historical data.
+      placeholder: Supports football fixtures and standings for...
+    validations:
+      required: true
+  - type: textarea
+    id: access
+    attributes:
+      label: Access and limits
+      description: API key, free tier, rate limits, attribution, and terms.
+      placeholder: Free tier allows...
+    validations:
+      required: true
+  - type: textarea
+    id: mapping
+    attributes:
+      label: Mapping notes
+      description: Known ID, status, timezone, or score mapping concerns.
+      placeholder: Match status maps to...
+  - type: checkboxes
+    id: safeguards
+    attributes:
+      label: OpenScore safeguards
+      options:
+        - label: Provider terms allow this use case.
+          required: true
+        - label: Attribution requirements are documented.
+          required: true
+        - label: No betting recommendation or gambling funnel is introduced.
+          required: true

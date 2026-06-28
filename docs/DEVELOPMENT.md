@@ -14,6 +14,7 @@
 - mock 数据源和 football-data provider 适配器：`packages/providers`
 - Prisma schema 和 repository 抽象：`packages/db`
 - Dockerfile 和 Docker Compose：`Dockerfile`、`docker-compose.yml`
+- GitHub Actions CI：`.github/workflows/ci.yml`
 - 今日比赛、积分榜、球队详情、球队状态、本地收藏、repository 读写、缓存、手动同步状态和自然语言查询的最小产品链路
 
 ## 2. 安装依赖
@@ -107,6 +108,13 @@ pnpm db:push
 - `pnpm typecheck`
 - `pnpm build`
 
+GitHub Actions 会在 push 和 pull request 上运行：
+
+- `pnpm db:generate`
+- `pnpm db:validate`
+- `pnpm typecheck`
+- `pnpm build`
+
 ## 5. API 快速检查
 
 ```powershell
@@ -173,6 +181,7 @@ football-data provider 当前已标准化：
 - AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema 已验证，但未执行真实数据库 migration，因为当前机器 `docker` 命令不可用。
+- CI 已覆盖 schema/client/typecheck/build，但还没有真实 PostgreSQL、Redis、provider key 或浏览器级端到端测试。
 
 ## 9. 下一步建议
 

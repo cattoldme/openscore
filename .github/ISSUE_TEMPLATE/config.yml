@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Roadmap
+    url: https://github.com/cattoldme/openscore/blob/main/docs/ROADMAP.md
+    about: Check planned work before opening a new feature request.
+  - name: Development guide
+    url: https://github.com/cattoldme/openscore/blob/main/docs/DEVELOPMENT.md
+    about: Local setup, verification commands, and known limitations.

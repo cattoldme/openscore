@@ -149,4 +149,4 @@ docker compose down -v
 1. 添加 migration/seed 执行流程
 2. 把 Redis 接入 cache 和 sync lock
 3. 拆分生产 Dockerfile，减小镜像体积
-4. 添加 CI 构建和镜像发布
+4. 添加镜像发布流程

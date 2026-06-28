@@ -83,7 +83,12 @@ Commercial data sources can be added later, but the MVP should prove the experie
 │   ├── domain
 │   └── providers
 ├── README.md
+├── CONTRIBUTING.md
 ├── LICENSE
+├── .github
+│   ├── ISSUE_TEMPLATE
+│   ├── workflows
+│   └── pull_request_template.md
 ├── docs
 │   ├── PROJECT_PROPOSAL.md
 │   ├── ROADMAP.md
@@ -121,6 +126,8 @@ Default URLs:
 Verify:
 
 ```bash
+pnpm db:validate
+pnpm db:generate
 pnpm typecheck
 pnpm build
 ```
@@ -155,6 +162,13 @@ Self-host with Docker Compose:
 docker compose up --build
 ```
 
+CI runs the same core checks on pushes and pull requests:
+
+- `pnpm db:generate`
+- `pnpm db:validate`
+- `pnpm typecheck`
+- `pnpm build`
+
 ## Project Principles
 
 - Keep the interface fast and quiet.
@@ -164,9 +178,13 @@ docker compose up --build
 - Make local development and self-hosting easy.
 - Keep the first release small enough to finish.
 
+## Contributing
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening issues or pull requests. Use the GitHub issue templates for bugs, feature requests, and data provider integrations.
+
 ## Status
 
-OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, memory/PostgreSQL repository implementations, football-data provider adapter, in-memory API cache, manual sync status endpoints, and a grounded natural-language query MVP. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, memory/PostgreSQL repository implementations, football-data provider adapter, in-memory API cache, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates. Real provider smoke testing still requires a `FOOTBALL_DATA_API_KEY`.
 
 See:
 

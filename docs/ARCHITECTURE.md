@@ -478,3 +478,10 @@ MVP 至少记录：
 - `Dockerfile`
 - `docker-compose.yml` 覆盖 Web、API、PostgreSQL、Redis
 - `docs/DEPLOYMENT.md` 简单自建部署指南
+- `.github/workflows/ci.yml` 基础 CI 门禁
+
+当前开源协作已实现：
+
+- `CONTRIBUTING.md`
+- GitHub issue templates
+- Pull request template

@@ -54,8 +54,9 @@
 
 ## Phase 5 - Open Source Release
 
-- [ ] Add contribution guide
-- [ ] Add issue templates
+- [x] Add contribution guide
+- [x] Add issue templates
 - [x] Add Docker Compose
+- [x] Add CI checks
 - [ ] Add hosted demo
 - [ ] Publish first release tag
