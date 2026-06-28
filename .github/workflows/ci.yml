@@ -55,3 +55,6 @@ jobs:
 
       - name: API smoke test
         run: pnpm smoke:api
+
+      - name: Web smoke test
+        run: pnpm smoke:web

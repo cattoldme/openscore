@@ -59,5 +59,6 @@
 - [x] Add Docker Compose
 - [x] Add CI checks
 - [x] Add API smoke test
+- [x] Add Web smoke test
 - [ ] Add hosted demo
 - [ ] Publish first release tag

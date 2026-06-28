@@ -9,6 +9,7 @@
 - [ ] `pnpm typecheck`
 - [ ] `pnpm build`
 - [ ] `pnpm smoke:api`
+- [ ] `pnpm smoke:web`
 
 ## Data and product safety
 

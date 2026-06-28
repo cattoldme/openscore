@@ -90,6 +90,14 @@ pnpm smoke:api
 
 `pnpm smoke:api` 会启动生产构建后的 API 到独立端口 `4100`，使用 `mock` provider 和内存 repository，依次检查 `/health`、`/sync/run`、`/sync/status`、今日比赛、积分榜、球队详情和 AI 查询。运行前需要先执行 `pnpm build`。
 
+Web 冒烟测试：
+
+```powershell
+pnpm smoke:web
+```
+
+`pnpm smoke:web` 会启动生产构建后的 API 和 Web，API 端口为 `4101`，Web 端口为 `3100`，使用 `mock` provider 和内存 repository，检查首页与 `/teams/arsenal` 是否能渲染关键中文内容。运行前需要先执行 `pnpm build`。
+
 Prisma schema 验证：
 
 ```powershell
@@ -116,6 +124,7 @@ pnpm db:push
 - `pnpm typecheck`
 - `pnpm build`
 - `pnpm smoke:api`
+- `pnpm smoke:web`
 
 GitHub Actions 会在 push 和 pull request 上运行：
 
@@ -124,6 +133,7 @@ GitHub Actions 会在 push 和 pull request 上运行：
 - `pnpm typecheck`
 - `pnpm build`
 - `pnpm smoke:api`
+- `pnpm smoke:web`
 
 ## 5. API 快速检查
 
@@ -191,7 +201,7 @@ football-data provider 当前已标准化：
 - AI 查询已有前端入口和 grounded API 回答，但尚未接真实 LLM provider。
 - Web 首页已有本地收藏比赛功能，暂未实现账户同步。
 - Prisma schema 已验证，但未执行真实数据库 migration，因为当前机器 `docker` 命令不可用。
-- CI 已覆盖 schema/client/typecheck/build/API smoke，但还没有真实 PostgreSQL、Redis、provider key 或浏览器级端到端测试。
+- CI 已覆盖 schema/client/typecheck/build/API smoke/Web smoke，但还没有真实 PostgreSQL、Redis、provider key 或浏览器级端到端测试。
 
 ## 9. 下一步建议
 
@@ -199,6 +209,6 @@ football-data provider 当前已标准化：
 2. 执行 `pnpm db:push`
 3. 用真实 `FOOTBALL_DATA_API_KEY` 做 provider smoke test
 4. 将默认部署切到 `SPORTS_REPOSITORY=postgres`
-5. 加 Playwright Web smoke test
+5. 加浏览器级 Playwright smoke test
 
 部署说明见 [Deployment](DEPLOYMENT.md)。
