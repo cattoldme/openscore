@@ -2,9 +2,10 @@ import { spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 
 loadDotEnv();
+const provider = process.env.OPEN_SCORE_PROVIDER_SMOKE_PROVIDER ?? "openligadb";
 const apiKey = process.env.FOOTBALL_DATA_API_KEY?.trim();
 
-if (!apiKey) {
+if (provider === "football_data" && !apiKey) {
   console.log("OpenScore provider smoke skipped: FOOTBALL_DATA_API_KEY is not set.");
   process.exit(0);
 }
@@ -27,10 +28,13 @@ const child = spawn(childCommand, childArgs, {
     NEXT_PUBLIC_API_BASE_URL: baseUrl,
     SPORTS_REPOSITORY: "memory",
     CACHE_PROVIDER: "memory",
-    SPORTS_PROVIDER: "football_data",
-    FOOTBALL_DATA_API_KEY: apiKey,
+    SPORTS_PROVIDER: provider,
+    FOOTBALL_DATA_API_KEY: apiKey ?? "",
     FOOTBALL_DATA_BASE_URL: process.env.FOOTBALL_DATA_BASE_URL ?? "https://api.football-data.org/v4",
     FOOTBALL_DATA_COMPETITIONS: process.env.FOOTBALL_DATA_COMPETITIONS ?? "PL",
+    OPENLIGADB_BASE_URL: process.env.OPENLIGADB_BASE_URL ?? "https://api.openligadb.de",
+    OPENLIGADB_LEAGUE: process.env.OPENLIGADB_LEAGUE ?? "bl1",
+    OPENLIGADB_SEASON: process.env.OPENLIGADB_SEASON ?? "",
     DATABASE_URL: "postgresql://openscore:openscore@localhost:5432/openscore?schema=public",
     REDIS_URL: "redis://localhost:6379",
     OPEN_SCORE_SMOKE_SHUTDOWN_TOKEN: shutdownToken
@@ -54,6 +58,8 @@ try {
   await assertTodayFixturesShape();
   await assertFinishedResults();
   await assertStandings();
+  await assertSyncRun();
+  await assertSyncStatus();
   console.log("OpenScore provider smoke passed.");
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
@@ -91,7 +97,7 @@ async function waitForHealth() {
 async function assertHealth() {
   const body = await getJson("/health");
   assert(body.data?.ok === true, "Expected /health data.ok to be true.");
-  assert(body.data?.provider === "football_data", "Expected /health provider to be football_data.");
+  assert(body.data?.provider === provider, `Expected /health provider to be ${provider}.`);
 }
 
 async function assertSports() {
@@ -103,7 +109,7 @@ async function assertSports() {
 async function assertCompetitions() {
   const body = await getJson("/competitions");
   assert(Array.isArray(body.data), "Expected /competitions data array.");
-  assert(body.data.some((competition) => competition.id === "premier-league"), "Expected Premier League competition.");
+  assert(body.data.some((competition) => competition.id === competitionId()), `Expected ${competitionId()} competition.`);
 }
 
 async function assertTodayFixturesShape() {
@@ -111,7 +117,7 @@ async function assertTodayFixturesShape() {
   assert(Array.isArray(body.data?.matches), "Expected /matches/today data.matches array.");
 
   for (const match of body.data.matches) {
-    assert(typeof match.id === "string" && match.id.startsWith("fd-"), "Expected football-data match id.");
+    assert(typeof match.id === "string" && match.id.startsWith(matchIdPrefix()), `Expected ${provider} match id.`);
     assert(typeof match.startsAt === "string", "Expected match startsAt.");
     assert(typeof match.homeTeamName === "string", "Expected home team name.");
     assert(typeof match.awayTeamName === "string", "Expected away team name.");
@@ -121,7 +127,7 @@ async function assertTodayFixturesShape() {
 async function assertFinishedResults() {
   const body = await getJson("/matches?status=finished");
   assert(Array.isArray(body.data), "Expected /matches?status=finished data array.");
-  assert(body.data.length > 0, "Expected at least one finished football-data match.");
+  assert(body.data.length > 0, `Expected at least one finished ${provider} match.`);
   assert(body.data.some((match) => match.status === "finished"), "Expected finished match status.");
   assert(
     body.data.some((match) => Number.isInteger(match.homeScore) && Number.isInteger(match.awayScore)),
@@ -130,12 +136,34 @@ async function assertFinishedResults() {
 }
 
 async function assertStandings() {
-  const body = await getJson("/competitions/premier-league/standings");
-  assert(body.data?.competition?.id === "premier-league", "Expected premier-league competition.");
+  const body = await getJson(`/competitions/${competitionId()}/standings`);
+  assert(body.data?.competition?.id === competitionId(), `Expected ${competitionId()} competition.`);
   assert(Array.isArray(body.data?.rows), "Expected standings rows array.");
   assert(body.data.rows.length > 0, "Expected real standings rows.");
   assert(Number.isInteger(body.data.rows[0]?.position), "Expected standing position.");
   assert(Number.isInteger(body.data.rows[0]?.points), "Expected standing points.");
+}
+
+async function assertSyncRun() {
+  const body = await postJson("/sync/run");
+  assert(body.data?.status === "succeeded", "Expected /sync/run to succeed.");
+  assert(body.data?.provider === provider, `Expected /sync/run provider to be ${provider}.`);
+  assert(body.data?.itemsRead > 0, "Expected /sync/run to read provider data.");
+}
+
+async function assertSyncStatus() {
+  const body = await getJson("/sync/status");
+  assert(body.data?.sync?.status === "succeeded", "Expected sync status to be succeeded.");
+  assert(body.data?.repository?.standings > 0, "Expected synced standings rows.");
+  assert(body.data?.sync?.lock?.provider === "memory", "Expected memory sync lock provider.");
+}
+
+function competitionId() {
+  return provider === "football_data" ? "premier-league" : "bundesliga";
+}
+
+function matchIdPrefix() {
+  return provider === "football_data" ? "fd-" : "ol-";
 }
 
 async function getJson(path) {

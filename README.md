@@ -136,7 +136,7 @@ pnpm smoke:web
 pnpm smoke:provider
 ```
 
-`pnpm smoke:provider` is optional: it reads `.env`, skips when `FOOTBALL_DATA_API_KEY` is not set, and validates football-data fixtures shape, finished results, and Premier League standings when a key is available.
+`pnpm smoke:provider` reads `.env` and validates the no-key OpenLigaDB provider by default. Set `OPEN_SCORE_PROVIDER_SMOKE_PROVIDER=football_data` to validate football-data.org with `FOOTBALL_DATA_API_KEY`.
 
 Provider configuration:
 
@@ -150,6 +150,12 @@ SPORTS_PROVIDER=football_data
 FOOTBALL_DATA_API_KEY=your-api-key
 FOOTBALL_DATA_BASE_URL=https://api.football-data.org/v4
 FOOTBALL_DATA_COMPETITIONS=PL
+
+# Optional no-key OpenLigaDB provider
+SPORTS_PROVIDER=openligadb
+OPENLIGADB_BASE_URL=https://api.openligadb.de
+OPENLIGADB_LEAGUE=bl1
+OPENLIGADB_SEASON=
 
 # Optional PostgreSQL repository
 SPORTS_REPOSITORY=postgres
@@ -184,7 +190,7 @@ CI runs the same core checks on pushes and pull requests:
 - `pnpm build`
 - `pnpm smoke:api`
 - `pnpm smoke:web`
-- `pnpm smoke:provider` (skips without `FOOTBALL_DATA_API_KEY`)
+- `pnpm smoke:provider`
 
 ## Project Principles
 
@@ -201,7 +207,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening issues or pull req
 
 ## Status
 
-OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, initial migration, seed script, memory/PostgreSQL repository implementations, memory/Redis cache and sync lock implementations, Compose database initialization, football-data provider adapter, optional real provider smoke test, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates. Running real provider smoke still requires a `FOOTBALL_DATA_API_KEY`.
+OpenScore now has the first monorepo prototype, mock product flow, Prisma schema, initial migration, seed script, memory/PostgreSQL repository implementations, memory/Redis cache and sync lock implementations, Compose database initialization, football-data and OpenLigaDB provider adapters, real provider smoke test, manual sync status endpoints, grounded natural-language query MVP, CI checks, and open-source contribution templates.
 
 See:
 

@@ -72,18 +72,19 @@ export function createSyncRunner(
       };
 
       try {
-        const [sports, competitions, fixtures, standings] = await Promise.all([
+        const [sports, competitions, fixtures] = await Promise.all([
           provider.fetchSports(),
           provider.fetchCompetitions(),
-          provider.fetchFixtures({ date: "today" }),
-          provider.fetchStandings({ competitionId: "premier-league" })
+          provider.fetchFixtures({ date: "today" })
         ]);
+        const primaryCompetitionId = competitions[0]?.id ?? "premier-league";
+        const standings = await provider.fetchStandings({ competitionId: primaryCompetitionId });
         const teams = deriveTeams(fixtures, standings);
 
         await repository.upsertSports(sports);
         await repository.upsertCompetitions(competitions);
         await repository.upsertMatches(fixtures);
-        await repository.upsertStandings("premier-league", standings);
+        await repository.upsertStandings(primaryCompetitionId, standings);
         await repository.upsertTeams(teams);
 
         snapshot = {

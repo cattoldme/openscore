@@ -81,6 +81,8 @@ async function assertHomePage() {
 
   assertIncludes(html, "干净、开源、无广告的比分工具", "Expected homepage headline.");
   assertIncludes(html, "今日比赛", "Expected today's matches section.");
+  assertIncludes(html, "近期赛果", "Expected recent results section.");
+  assertIncludes(html, "后续赛程", "Expected upcoming fixtures section.");
   assertIncludes(html, "积分榜", "Expected standings section.");
   assertIncludes(html, "阿森纳", "Expected Arsenal to render on homepage.");
 }

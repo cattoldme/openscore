@@ -41,9 +41,9 @@
 
 ## Phase 3 - MVP
 
-- [ ] Show real fixtures
-- [ ] Show real results
-- [ ] Show real standings
+- [x] Show real fixtures
+- [x] Show real results
+- [x] Show real standings
 - [x] Show team recent form
 - [x] Add PWA manifest
 - [x] Add simple deployment guide

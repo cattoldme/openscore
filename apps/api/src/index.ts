@@ -35,6 +35,11 @@ const sports = createSportsService(env.SPORTS_PROVIDER, {
     apiKey: env.FOOTBALL_DATA_API_KEY,
     baseUrl: env.FOOTBALL_DATA_BASE_URL,
     competitionCodes: parseList(env.FOOTBALL_DATA_COMPETITIONS)
+  },
+  openLigaDb: {
+    baseUrl: env.OPENLIGADB_BASE_URL,
+    leagueShortcut: env.OPENLIGADB_LEAGUE,
+    season: parseOptionalInt(env.OPENLIGADB_SEASON)
   }
 });
 const syncRunner = createSyncRunner(sports.provider, sports.repository, {
@@ -264,4 +269,15 @@ function parseList(value: string): string[] {
     .split(",")
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function parseOptionalInt(value: string): number | undefined {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return undefined;
+  }
+
+  const parsed = Number.parseInt(trimmed, 10);
+  return Number.isNaN(parsed) ? undefined : parsed;
 }

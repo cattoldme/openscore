@@ -45,14 +45,19 @@ export async function getHomeData() {
   const apiBaseUrl = process.env.API_BASE_URL ?? "http://localhost:4000";
 
   try {
-    const [today, standings] = await Promise.all([
+    const competitionId = await getPrimaryCompetitionId(apiBaseUrl);
+    const [today, recentResults, upcomingFixtures, standings] = await Promise.all([
       fetchJson<TodayResponse>(`${apiBaseUrl}/matches/today`),
-      fetchJson<StandingsResponse>(`${apiBaseUrl}/competitions/premier-league/standings`)
+      fetchJson<MatchSummary[]>(`${apiBaseUrl}/matches?status=finished`),
+      fetchJson<MatchSummary[]>(`${apiBaseUrl}/matches?status=scheduled`),
+      fetchJson<StandingsResponse>(`${apiBaseUrl}/competitions/${competitionId}/standings`)
     ]);
 
     return {
       apiAvailable: true,
       matches: today.data.matches,
+      recentResults: recentResults.data.slice(0, 6),
+      upcomingFixtures: upcomingFixtures.data.slice(0, 6),
       standings: standings.data,
       teamForms: buildTeamForms(today.data.matches),
       updatedAtLabel: new Date(today.meta.updatedAt).toLocaleTimeString("zh-CN", {
@@ -64,6 +69,8 @@ export async function getHomeData() {
     return {
       apiAvailable: false,
       matches: [],
+      recentResults: [],
+      upcomingFixtures: [],
       standings: {
         competition: {
           id: "premier-league",
@@ -85,10 +92,11 @@ export async function getTeamPageData(teamId: string): Promise<TeamPageData> {
   const apiBaseUrl = process.env.API_BASE_URL ?? "http://localhost:4000";
 
   try {
+    const competitionId = await getPrimaryCompetitionId(apiBaseUrl);
     const [team, matches, standings] = await Promise.all([
       fetchJson<TeamResponse>(`${apiBaseUrl}/teams/${teamId}`),
       fetchJson<MatchSummary[]>(`${apiBaseUrl}/matches`),
-      fetchJson<StandingsResponse>(`${apiBaseUrl}/competitions/premier-league/standings`)
+      fetchJson<StandingsResponse>(`${apiBaseUrl}/competitions/${competitionId}/standings`)
     ]);
 
     return {
@@ -141,6 +149,11 @@ async function fetchJson<T>(url: string): Promise<ApiResponse<T>> {
   }
 
   return response.json() as Promise<ApiResponse<T>>;
+}
+
+async function getPrimaryCompetitionId(apiBaseUrl: string): Promise<string> {
+  const competitions = await fetchJson<Competition[]>(`${apiBaseUrl}/competitions`);
+  return competitions.data[0]?.id ?? "premier-league";
 }
 
 function getBrowserApiBaseUrl(): string {

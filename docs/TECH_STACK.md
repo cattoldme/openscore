@@ -186,7 +186,7 @@ AI 查询不允许凭空回答。
 
 模型只做解释，不做事实来源。
 
-当前 MVP 已先实现确定性查询回答：API 从结构化比赛、进行中比分和积分榜生成中文回答，并返回 source/update timestamp。LLM provider 接入后仍沿用这个检索边界。
+当前 MVP 已先实现确定性查询回答：API 从结构化比赛、进行中比分和积分榜生成中文回答，并返回 source/update timestamp。OpenLigaDB 可无密钥验证真实 Bundesliga 赛程、赛果和积分榜；LLM provider 接入后仍沿用这个检索边界。
 
 ## 9. 部署策略
 

@@ -11,7 +11,7 @@
 - [ ] `pnpm build`
 - [ ] `pnpm smoke:api`
 - [ ] `pnpm smoke:web`
-- [ ] `pnpm smoke:provider` or confirm it skipped without `FOOTBALL_DATA_API_KEY`
+- [ ] `pnpm smoke:provider`
 
 ## Data and product safety
 

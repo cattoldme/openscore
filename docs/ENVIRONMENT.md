@@ -97,6 +97,9 @@ Copy-Item .env.example .env
 | `FOOTBALL_DATA_BASE_URL` | 是 | 默认 `https://api.football-data.org/v4` |
 | `FOOTBALL_DATA_COMPETITIONS` | 是 | 默认 `PL`，多个赛事用英文逗号分隔 |
 | `THESPORTSDB_API_KEY` | 否 | 接入 TheSportsDB 时填写 |
+| `OPENLIGADB_BASE_URL` | 是 | 默认 `https://api.openligadb.de` |
+| `OPENLIGADB_LEAGUE` | 是 | 默认 `bl1` |
+| `OPENLIGADB_SEASON` | 否 | 留空时按当前日期推导赛季 |
 | `AI_PROVIDER` | 是 | MVP 可先用 `disabled` |
 | `OPENAI_API_KEY` | 否 | 启用 AI 查询时填写 |
 
@@ -135,6 +138,7 @@ Copy-Item .env.example .env
 - Web/API 基础工程
 - mock provider
 - football-data provider 适配器
+- OpenLigaDB provider 适配器和真实 provider smoke
 - 内存 repository 和 PostgreSQL repository
 - 内存 cache 和 Redis cache adapter
 - 内存 sync lock 和 Redis sync lock
@@ -147,7 +151,6 @@ Copy-Item .env.example .env
 - 初始 Prisma migration
 - mock seed 脚本
 - GitHub Actions CI 基础门禁
-- 可选 football-data provider smoke test
 - 贡献指南、PR 模板和 issue 模板
 
 ## 7. 非交互环境提示
@@ -182,6 +185,6 @@ GitHub Actions 使用 Node.js 24 和 pnpm 11，默认 mock provider 与内存 re
 - 生产构建
 - API smoke test
 - Web smoke test
-- Provider smoke test，没有 `FOOTBALL_DATA_API_KEY` 时跳过
+- Provider smoke test，默认使用无密钥 OpenLigaDB
 
-真实数据库 migration/seed、Redis cache/lock runtime smoke、带真实 `FOOTBALL_DATA_API_KEY` 的 provider smoke test 和浏览器级端到端测试仍需要后续补齐。
+真实数据库 migration/seed、Redis cache/lock runtime smoke、带真实 `FOOTBALL_DATA_API_KEY` 的 football-data smoke test 和浏览器级端到端测试仍需要后续补齐。

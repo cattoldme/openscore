@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { MatchSummary } from "@openscore/domain";
 import { AiQueryPanel } from "../components/ai-query-panel";
 import { ScoreCard } from "../components/score-card";
 import { StandingsTable } from "../components/standings-table";
@@ -38,9 +39,11 @@ export default async function HomePage() {
             <span className="text-sm text-slate-500">更新时间 {home.updatedAtLabel}</span>
           </div>
           <div className="grid gap-3">
-            {home.matches.map((match) => (
-              <ScoreCard key={match.id} match={match} />
-            ))}
+            {home.matches.length > 0 ? (
+              home.matches.map((match) => <ScoreCard key={match.id} match={match} />)
+            ) : (
+              <EmptyState label="今天暂无比赛" />
+            )}
           </div>
         </div>
 
@@ -83,6 +86,11 @@ export default async function HomePage() {
         </aside>
       </section>
 
+      <section className="grid gap-4 lg:grid-cols-2">
+        <MatchList title="近期赛果" matches={home.recentResults} emptyLabel="暂无已完赛赛果" />
+        <MatchList title="后续赛程" matches={home.upcomingFixtures} emptyLabel="暂无后续赛程" />
+      </section>
+
       <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-soft">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-xl font-bold text-ink">积分榜</h2>
@@ -91,6 +99,25 @@ export default async function HomePage() {
         <StandingsTable rows={home.standings.rows} />
       </section>
     </main>
+  );
+}
+
+function MatchList({ emptyLabel, matches, title }: { emptyLabel: string; matches: MatchSummary[]; title: string }) {
+  return (
+    <section>
+      <h2 className="mb-3 text-xl font-bold text-ink">{title}</h2>
+      <div className="grid gap-3">
+        {matches.length > 0 ? matches.map((match) => <ScoreCard key={match.id} match={match} />) : <EmptyState label={emptyLabel} />}
+      </div>
+    </section>
+  );
+}
+
+function EmptyState({ label }: { label: string }) {
+  return (
+    <div className="rounded-lg border border-dashed border-slate-200 bg-white p-4 text-sm text-slate-500 shadow-soft">
+      {label}
+    </div>
   );
 }
 

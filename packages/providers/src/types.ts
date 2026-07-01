@@ -19,8 +19,15 @@ export type FootballDataProviderOptions = {
   competitionCodes?: string[];
 };
 
+export type OpenLigaDbProviderOptions = {
+  baseUrl?: string;
+  leagueShortcut?: string;
+  season?: number;
+};
+
 export type SportsDataProviderOptions = {
   footballData?: FootballDataProviderOptions;
+  openLigaDb?: OpenLigaDbProviderOptions;
 };
 
 export type AiQueryResult = {

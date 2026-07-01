@@ -67,6 +67,15 @@ DATABASE_URL=postgresql://openscore:openscore@localhost:5432/openscore?schema=pu
 REDIS_URL=redis://localhost:6379
 ```
 
+默认可以使用无密钥 OpenLigaDB：
+
+```env
+SPORTS_PROVIDER=openligadb
+OPENLIGADB_BASE_URL=https://api.openligadb.de
+OPENLIGADB_LEAGUE=bl1
+OPENLIGADB_SEASON=
+```
+
 接入 football-data.org 时填写：
 
 ```env
@@ -159,7 +168,7 @@ docker compose down -v
 - PostgreSQL schema、migration、repository、seed dry-run 和 Compose 配置已验证到类型/构建层，但当前机器没有 PostgreSQL/Docker，尚未执行真实 Docker Compose smoke test。
 - 本地开发默认 `SPORTS_REPOSITORY=memory` 时，服务重启后内存 repository 数据会丢失；Docker Compose 默认使用 `COMPOSE_SPORTS_REPOSITORY=postgres`。
 - Redis cache adapter 和 Redis sync lock 已实现；真实 Redis runtime smoke 仍需 Docker 或 Redis 环境。
-- football-data.org 真实数据需要 `FOOTBALL_DATA_API_KEY`。
+- OpenLigaDB 真实数据不需要 API key；football-data.org 真实数据需要 `FOOTBALL_DATA_API_KEY`。
 - AI 查询当前是确定性 grounded MVP，还没有接真实 LLM provider。
 
 ## 8. 后续部署演进

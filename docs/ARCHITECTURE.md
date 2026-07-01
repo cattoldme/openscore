@@ -171,6 +171,7 @@ flowchart LR
 - `createSportsDataProvider()` 工厂
 - `mock` provider
 - `football_data` provider 适配器，基于 football-data.org v4 HTTP API
+- `openligadb` provider 适配器，基于 OpenLigaDB JSON API，无需 API key
 
 ### 4.6 packages/ai
 
@@ -469,7 +470,7 @@ MVP 至少记录：
 
 当前 API 已实现：
 
-- mock provider 和 football-data provider 选择
+- mock、football-data 和 OpenLigaDB provider 选择
 - repository 读写抽象、内存 repository 和 PostgreSQL repository
 - 内存 TTL cache 和 Redis cache adapter
 - 内存 sync lock 和 Redis sync lock
